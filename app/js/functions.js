@@ -78,15 +78,17 @@ function fetchPrice(event,thisVal) {
 	var quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
 	var unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
 	var amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
-	var descriptionVal = $('option:selected', thisVal).attr('description');
-	var unitPriceVal = $('option:selected', thisVal).attr('price') || 0;
+	// var descriptionVal = $('option:selected', thisVal).attr('description');
+	// var unitPriceVal = $('option:selected', thisVal).attr('price') || 0;
+	var descriptionVal = "";
+	var unitPriceVal = 0;
 	var quantityVal = quantity.value || 0;
-	// for(product of productsDataLis){
-	// 	if(product.id == productId){
-	// 		unitPriceVal = product.Unit_Price;
-	// 		descriptionVal = product.Description;
-	// 	}
-	// }
+	for(product of productsDataLis){
+		if(product.id == productId){
+			unitPriceVal = product.Unit_Price;
+			descriptionVal = product.Description;
+		}
+	}
 	description.value = descriptionVal != "null" ? descriptionVal: "";
 	unitPrice.value = unitPriceVal;
 	amount.value = quantityVal * unitPriceVal;

@@ -1,6 +1,4 @@
 //Fields and Global Varibales
-// new time
-// 3rd
 var currDate = new Date();
 var productsDataLis = [];
 var productsRelations = {};
@@ -9,6 +7,7 @@ var crmAppTypeSingle;
 var crmSeries;
 var crmSeriesSingle;
 var crmSizes;
+var apiTableData;
 var emptyOpt = '<option value="">-None-</option>';
 var subject = document.getElementById("subject");
 var accountName = document.getElementById("accountName");
@@ -67,9 +66,16 @@ async function addRow(thisVal,tabBody){
 		rowVal = rowCount[tabBody];
 		let conMap = {pumpBody:"pump_",accessoryBody:"accessory_",sparePartBody:"sparePart_"};
 		let firstLtr = conMap[tabBody].substring(0,1);
+		let mandatoryCheck = false;
+		let routeMethod = false;
+		let serSeries = "";
+		let serSize = "";
+		let serSpeed = "";
+		let apiSpecs;
 		if(document.getElementById("DYK_Yes").checked && tabBody == "pumpBody"){
 			// Route 2 No API
-			let mandatoryCheck = true;
+			mandatoryCheck = true;
+			routeMethod = true;
 			for(let i of $("#basicSession :input")){
 				if(!i.value){
 					mandatoryCheck = false;
@@ -80,53 +86,35 @@ async function addRow(thisVal,tabBody){
 					mandatoryCheck = false;
 				}
 			}
-			if(mandatoryCheck){
-				// var searchMap = {Casing_MoC:"CF%208M%20%5C%28SS316%5C%29"};
-				var searchMap = {Pump_Type:pumpType.value,Series:series.value,Shaft_Speed:shaftSpeed.value,Size:size.value};
-				var filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
-				var searchQuery = "(";
-				var encodeMap = {"(":"%28",")":"%29",",":"%2C"};
-				var escpChar = "%5C";
-				for(let key in searchMap){
-					var fieldVal = searchMap[key];
-					for( let escpKey in encodeMap){
-						fieldVal = fieldVal.replaceAll(escpKey,escpChar+encodeMap[escpKey]);
-					}
-					searchQuery += "("+key+":equals:"+fieldVal+")and";
-				}
-				searchQuery = searchQuery.endsWith("and") ? searchQuery.slice(0,searchQuery.length - 3) + ")" : searchQuery + ")";
-				console.log(searchQuery);
-				var resPump = await searchRecord("Products",searchQuery) || [];
-				console.log(resPump);
-					var finalPump = resPump.filter(val => {
-						let rtnVal = true;
-						for(key in filterMap){
-							if(val[key] != filterMap[key]){
-								rtnVal = false;
-							}
-						}
-						return rtnVal;
-					});
-					if(finalPump != ""){
-						appendTabRow(tabBody,rowVal);
-						require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
-						rowCount[tabBody]++;
-						// console.log(finalPump);
-						let rowField = document.getElementById(conMap[tabBody]+rowVal);
-						rowField.innerHTML = emptyOpt+finalPump.map(data => {
-							return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
-						}).join("");
-					}
-					else{
-						swal("Invalid Selection","No porducts available with given values","info");
-					}
-			}
-			else{
-				swal("Empty Value","Select all the fields marked mandatory","error");
-			}
+			serSeries = series.value;
+			serSize = size.value;
+			serSpeed = shaftSpeed.value;
+			apiSpecs = "Route 2";
 		}
 		else if(document.getElementById("DYK_No").checked && tabBody == "pumpBody"){
-			
+			// Route 1 API
+			mandatoryCheck = true;
+			routeMethod = true;
+			let seriesChk = document.getElementsByName("checkBtn");
+			seriesChk.forEach(thisVal => {
+				if(thisVal.checked){
+					let rowIndex = thisVal.getAttribute("index");
+					serSeries = document.getElementById("SERIES_"+rowIndex).value;
+					serSize = document.getElementById("SIZE_"+rowIndex).value;
+					serSpeed = document.getElementById("SPEED_"+rowIndex).value;
+					apiSpecs = JSON.stringify(apiTableData[rowIndex]);
+				}
+			});
+			if(serSeries != ""){
+				for(let i of $("#pumpInfoSession :input")){
+					if(!i.value){
+						mandatoryCheck = false;
+					}
+				}
+			}
+			else{
+				swal("Invalid Selection","Select any one of the result in the pump specification list or Click the SEARCH Button","info");
+			}
 		}
 		else{
 			appendTabRow(tabBody,rowVal);
@@ -144,6 +132,45 @@ async function addRow(thisVal,tabBody){
 					}
 				}
 			});	
+		}
+		if(mandatoryCheck && routeMethod){
+			var searchMap = {Pump_Type:pumpType.value,Series:serSeries,Shaft_Speed:serSpeed,Size:serSize};
+			var filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
+			var searchQuery = "(";
+			for(let key in searchMap){
+				searchQuery += "("+key+":equals:"+searchMap[key]+")and";
+			}
+			searchQuery = searchQuery.endsWith("and") ? searchQuery.slice(0,searchQuery.length - 3) + ")" : searchQuery + ")";
+			console.log(searchQuery);
+			var resPump = await searchRecord("Products",searchQuery) || [];
+			console.log(resPump);
+				var finalPump = resPump.filter(val => {
+					let rtnVal = true;
+					for(key in filterMap){
+						if(val[key] != filterMap[key]){
+							rtnVal = false;
+						}
+					}
+					return rtnVal;
+				});
+				if(finalPump != ""){
+					appendTabRow(tabBody,rowVal);
+					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
+					rowCount[tabBody]++;
+					// console.log(finalPump);
+					let rowField = document.getElementById(conMap[tabBody]+rowVal);
+					let pumpSpec = document.getElementById("p_specs_"+rowVal);
+					pumpSpec.value = apiSpecs;
+					rowField.innerHTML = emptyOpt+finalPump.map(data => {
+						return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
+					}).join("");
+				}
+				else{
+					swal("Invalid Selection","No porducts available with given values","info");
+				}
+		}
+		else if(routeMethod){
+			swal("Empty Value","Select all the fields marked mandatory","error");
 		}
 }
 // Add row button code - end
@@ -164,13 +191,21 @@ document.getElementById("searchBtn").onclick = event => {
 	}
 	if(mandatoryCheck){
 		var fetchUrl = new URL("http://test.makemypump.com:8288//api/Curve/GetCurveTest");
-		var params = {fld1:"Horizontal",fld2:"Water",fld3:"70",fld4:"m3/hr",fld5:"30",fld6:"m",fld7:"40",fld8:"",fld9:"1",fld10:"1450"};
+		let pumpTypeAPI;
+		crmPumpTypes.forEach(val => {
+			if(val.id == pumpType.value){
+				pumpTypeAPI = val.Name;
+			}
+		});
+		let applicationTypeAPI = crmAppTypeSingle.Name;
+		var params = {fld1:pumpTypeAPI,fld2:applicationTypeAPI,fld3:flowRate.value,fld4:"m3/hr",fld5:head.value,fld6:"m",fld7:temperature.value,fld8:"",fld9:specifiGravity.value,fld10:shaftSpeed_API.value};
 		Object.keys(params).forEach(key => fetchUrl.searchParams.append(key, params[key]));
 		console.log(fetchUrl);
 		fetch(fetchUrl)
 		.then(resp => resp.json(), err => swal("Unkown Error",err.toString(),"warning"))
 		.then(data => {
 			if(data.Table1){
+				apiTableData = data.Table1;
 				$('.apiTable').show();
 				var rtn = data.Table1.map((val,index) => {
 					let visCln = ["SERIES","SIZE","SPEED","DIA","EFFICIENCY","SHAFT_POWER"];
@@ -188,6 +223,9 @@ document.getElementById("searchBtn").onclick = event => {
 					return tabRow;
 				});
 				document.getElementById("apiBody").innerHTML = rtn.join("");
+			}
+			else{
+				swal("Unkown Error",data.toString(),"warning");
 			}
 		});
 	}
@@ -267,12 +305,6 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 			let opt = document.createElement("option");
 			opt.text = product.Product_Name +"-"+ product.Product_Code;
 			opt.value = product.id;
-			var attPrc = document.createAttribute("price");
-			attPrc.value = product.Unit_Price;
-			opt.setAttributeNode(attPrc);
-			var attDes = document.createAttribute("description");
-			attDes.value = product.Description;
-			opt.setAttributeNode(attDes);
 			for(let value of eleAndCat[key]){
 					value.add(opt);
 			}
