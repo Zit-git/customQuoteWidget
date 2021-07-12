@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Kishor Pump Widget</title>
+      <meta charset="utf-8">
+      <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+      <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+      <link rel="stylesheet" href="../css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+      <link rel="stylesheet" href="../css/style.css">
+      <link href="../css/datepicker.css" rel="stylesheet" />
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+      <script src="../js/jquery.min.js"></script>
+      <script src="../js/popper.min.js"></script>
+      <script src="../js/bootstrap.min.js"></script>
+      <script src="../js/bootstrap-datepicker.js"></script>
+      <script src="../js/lib/ZohoEmbededAppSDK.min.js"></script>
+   </head>
+   <body>
+      <form>
+         <nav class="navbar navbar-expand-sm  bg-white navbar-white fixed-top mb-5  border-bottom " >
+            <h4 class="w-50" id="titleTxt">Create Quote</h4>
+            <ul class="navbar-nav justify-content-end w-50">
+              <li class="nav-item">
+               <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn" onclick="">Cancel</button>
+              </li>
+              <li class="nav-item">
+                <button type="submit" class="btn btn-primary saveBtn" id="submitBtn" onclick="submitFun(this)">Save</button>
+              </li>
+            </ul>
+          </nav>
+      <div class="container-fluid">
+      <div class="row pb-3">
+         <div class="col-12">
+            <h4>Create Quote</h4>
+            <br>
+            <h4>Quote Information</h4>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="subject" class="mr-sm-2 justify-content-end">Subject</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <input type="text" class="form-control" id="subject">
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="quoteStage" class="mr-sm-2 justify-content-end">Quote Stage</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="quoteStage" disabled>
+                  <!-- <option value="">-None-</option> -->
+               </select>
+            </div>
+         </div>
+      </div>
+      <div class="row pb-3">
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="contactName" class="mr-sm-2 justify-content-end">Contact Name</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="contactName">
+                  <option value="">-None-</option>
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="quoteDate" class="mr-sm-2 justify-content-end">Quoto Date</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <!-- <div class="input-group date" data-date-format="mm-dd-yyyy"> -->
+                  <input class="form-control" id="quoteDate" type="date" disabled>
+                  <!-- <span class="input-group-addon"><i class="fas fa-calendar-alt"></i></span>
+               </div> -->
+            </div>
+         </div>
+      </div>
+      <div class="row pb-3">
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="accountName" class="mr-sm-2 justify-content-end">Account Name</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="accountName">
+                  <option value="">-None-</option>
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="plant" class="mr-sm-2 justify-content-end">Plant</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <input type="text" class="form-control" id="plant">
+            </div>
+         </div>
+      </div>
+      <div class="row pb-3">
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="dealName" class="mr-sm-2 justify-content-end">Deal Name</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="dealName">
+                  <option value="">-None-</option>
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="equipmentNumber" class="mr-sm-2 justify-content-end">Equipment Number</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <input type="text" class="form-control" id="equipmentNumber">
+            </div>
+         </div>
+      </div>
+      <div class="row pb-3">
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="productType" class="mr-sm-2 justify-content-end">Product Type</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="productType">
+                  <option value="">-None-</option>
+                  <option value="Pump">Pump</option>
+                  <option value="Accessory">Accessory</option>
+                  <option value="Spare Part">Spare Part</option>
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="equipmentName" class="mr-sm-2 justify-content-end">Equipment Name</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <input type="text" class="form-control" id="equipmentName">
+            </div>
+         </div>
+      </div>
+      <div class="row pb-3">
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="accessoryType" class="mr-sm-2 justify-content-end">Accessory Type</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="accessoryType">
+                  <option value="">-None-</option>
+               </select>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="liquid" class="mr-sm-2 justify-content-end">Liquid</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <input type="text" class="form-control" id="liquid">
+            </div>
+         </div>
+      </div>
+      <div class="row pb-3">
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12 dyk">
+               <label for="email" class="mr-sm-2 justify-content-end">Do you know Series/Size/Model?</label>
+            </div>
+            <div class="col-sm-8 col-12 dyk">
+               <div class="form-check-inline">
+                  <label class="form-check-label">
+                  <input type="radio" class="form-check-input show-basic" id="DYK_Yes" name="optradio" value="yes" onclick="showDetail(this)">Yes
+                  </label>
+               </div>
+               <div class="form-check-inline">
+                  <label class="form-check-label">
+                  <input type="radio" class="form-check-input show-basic" id="DYK_No" name="optradio" value="no" onclick="showDetail(this)">No
+                  </label>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-4 col-12">
+               <label for="brand" class="mr-sm-2 justify-content-end">Brand</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <select class="form-control w-100" id="brand">
+                  <option value="">-None-</option>
+               </select>
+            </div>
+         </div>
+      </div>
+      <div class="first-session">
+         <div class="basic-session" id="basicSession">
+            <div class="row pb-3">
+               <div class="col-12">
+                  <h4>Basic  Specification</h4>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="pumpType" class="mr-sm-2 justify-content-end">Pump Type</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="pumpType">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="series" class="mr-sm-2 justify-content-end">Series</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="series">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="shaftSpeed" class="mr-sm-2 justify-content-end">Shaft Speed(rpm)</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="shaftSpeed">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="size" class="mr-sm-2 justify-content-end">Size</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="size">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="detail-session" id="detailSession">
+            <div class="row pb-3">
+               <div class="col-12">
+                  <h4>Detail Specification</h4>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="applicationType" class="mr-sm-2 justify-content-end">Application Type</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="applicationType">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="specifiGravity" class="mr-sm-2 justify-content-end">Specifi Gravity</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <input type="number" class="form-control" id="specifiGravity">
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="flowRate" class="mr-sm-2 justify-content-end">Flow Rate</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <input type="number" class="form-control" id="flowRate">
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="flowRateUnit" class="mr-sm-2 justify-content-end">Flow Rate Unit</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="flowRateUnit">
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="head" class="mr-sm-2 justify-content-end">Head</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <input type="number" class="form-control" id="head">
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="headUnit" class="mr-sm-2 justify-content-end">Head Unit</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="headUnit">
+                        <!-- <option value="">-None-</option> -->
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="temperature" class="mr-sm-2 justify-content-end">Temperature</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <input type="number" class="form-control" id="temperature">
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="temperatureUnit" class="mr-sm-2 justify-content-end">Temperature Unit</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="temperatureUnit">
+                        <!-- <option value="">-None-</option> -->
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="shaftSpeed_API" class="mr-sm-2 justify-content-end">Shaft Speed</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="shaftSpeed_API">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="shaftSpeedUnit" class="mr-sm-2 justify-content-end">Shaft Speed Unit</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="shaftSpeedUnit">
+                        <!-- <option value="">-None-</option> -->
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="shr" class="mr-sm-2 justify-content-end">Solid Handling Requirement (SHR)</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <input type="number" class="form-control" id="shr">
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="shrUnit" class="mr-sm-2 justify-content-end">Solid Handling Requirement Unit</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="shrUnit">
+                        <!-- <option value="">-None-</option> -->
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-12 col-12 w-100 p-0">
+                  <button type="button" class="btn border saveBtn mx-auto d-block" style="color: white;" id="searchBtn"> SEARCH</button>
+                  <br>
+                  <div class="col-sm-5 col-5 form-inline">
+                  </div>
+               </div>
+               <div class="container-fluid">
+                  <div class="row pb-3 apiTable">
+                     <div class="col-12">
+                        <!-- <h6>Select Pump</h6> -->
+                     </div>
+                     <div class="col-12">
+                        <div class="table-responsive">
+                           <table  class="table table-bordered">
+                              <thead>
+                                 <tr>
+                                    <th>Pump Series</th>
+                                    <th>Pump Size</th>
+                                    <th>Pump Speed(rpm)</th>
+                                    <th>Nearest Impeller dia(mm)</th>
+                                    <th>Duty Point Eff(%)</th>
+                                    <th>Shaft Power (bkW / bhp)</th>
+                                    <th>Select 👇</th>
+                                 </tr>
+                              </thead>
+                              <tbody id="apiBody">
+                                 <!-- <tr>
+                                    <td><input type="text" name="pumpSeries" id="SERIES_1" index="1" class="form-control" ></td>
+                                    <td><input type="text" name="pumpSize" id="pumpSize_###" index="###" class="form-control" disabled></td>
+                                    <td><input type="text" name="pumpSpeed" id="pumpSpeed_###" index="###" class="form-control" disabled></td>
+                                    <td ><input type="text" name="nearestImpeller" id="nearestImpeller_###" index="###" class="form-control" disabled></td>
+                                    <td ><input type="text" name="dutyPoint" id="dutyPoint_###" index="###" class="form-control" disabled></td>
+                                    <td ><input type="text" name="shaftPower" id="shaftPower_###" index="###" class="form-control" disabled></td>
+                                    <td><input type="checkbox" class="btn-check" name="checkBtn" id="checkBtn_1" index="1" onClick="checkApiRow(this)"></td>
+                                 </tr> -->
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="pumpInfo-session" id="pumpInfoSession">
+            <div class="row pb-3">
+               <div class="col-12">
+                  <h4>Pump Information</h4>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="casingMoc" class="mr-sm-2 justify-content-end">Casing Moc</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="casingMoc">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="shaftSealing" class="mr-sm-2 justify-content-end">Shaft Sealing</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="shaftSealing">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="impellerMoc" class="mr-sm-2 justify-content-end">Impeller Moc</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="impellerMoc">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="sealingGlandFlushing" class="mr-sm-2 justify-content-end">Sealing Gland Flushing</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="sealingGlandFlushing">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="lubrication" class="mr-sm-2 justify-content-end">Lubrication</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="lubrication">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="flangeDrilling" class="mr-sm-2 justify-content-end">Flange Drilling</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="flangeDrilling">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="pump-session">
+            <div class="container-fluid">
+               <div class="row pb-3">
+                  <div class="col-12">
+                     <h4>Pump</h4>
+                  </div>
+                  <div class="col-12">
+                     <table id="pumpTable" class="table table-bordered">
+                        <thead>
+                           <tr>
+                              <th class="th300">Pump</th>
+                              <th class="th45">Quantity</th>
+                              <th class="th45">Unit Price</th>
+                              <th class="th45">Amount</th>
+                              <th style="border: none;"></th>
+                           </tr>
+                        </thead>
+                        <tbody id="pumpBody">
+                           <tr style="display: none;">
+                              <td>
+                                 <select class="form-control w-100" name="pump" id="pump_###" index="###" onchange="fetchPrice(event,this)">
+                                    <option value="">-None-</option>
+                                 </select>
+                                 <textarea class='form-control' rows='5' name="p_description" id='p_description_###' index="###" placeholder="Description"></textarea>
+                              </td>
+                              <td><input type="number" class="form-control" name="p_quantity" id="p_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
+                              <td><input type="text" class="form-control symbol-unit" name="p_unitPrice" id="p_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                              <td><input type="text" class="form-control symbol-unit" name="p_amount" id="p_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                              <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="p_delete_###" index="###" onclick="delRow(this)"></i></td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <button type="button" class="btn border" onClick="addRow(this,'pumpBody')"><i class="fas fa-plus"></i> Add Row</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row pb-3 pumpTotal">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline"></div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="pumpTotal" class="mr-sm-2 justify-content-end">Pump Total</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="pumpTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="accessory-session">
+            <div class="container-fluid">
+               <div class="row pb-3">
+                  <div class="col-12">
+                     <h4>Accessory</h4>
+                  </div>
+                  <div class="col-12">
+                     <div class="table-responsive">
+                        <table id="accessoryTable" class="table table-bordered">
+                           <thead>
+                              <tr>
+                                 <th class="th300">Accessory</th>
+                                 <th class="th45">Quantity</th>
+                                 <th class="th45">Unit Price</th>
+                                 <th class="th45">Amount</th>
+                                 <th style="border: none;"></th>
+                              </tr>
+                           </thead>
+                           <tbody id="accessoryBody">
+                              <tr style="display: none;">
+                                 <td>
+                                    <select class="form-control w-100" name="accessory" id="accessory_###" index="###" onchange="fetchPrice(event,this)">
+                                       <option value="">-None-</option>
+                                    </select>
+                                    <textarea class='form-control' rows='5' name="a_description" id='a_description_###' index="###" placeholder="Description"></textarea>
+                                 </td>
+                                 <td><input type="number" class="form-control" name="a_quantity" id="a_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
+                                 <td><input type="text" class="form-control symbol-unit" name="a_unitPrice" id="a_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td><input type="text" class="form-control symbol-unit" name="a_amount" id="a_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="a_delete_###" index="###" onclick="delRow(this)"></i></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <button type="button" class="btn border" onClick="addRow(this,'accessoryBody')"><i class="fas fa-plus"></i> Add Row</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row pb-3 accessoryTotal">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline"></div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="accessoryTotal" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Accessory Total</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="accessoryTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="spare-session">
+            <div class="container-fluid">
+               <div class="row pb-3">
+                  <div class="col-12">
+                     <h4>Spare Part</h4>
+                  </div>
+                  <div class="col-12">
+                     <div class="table-responsive">
+                        <table id="spareTable" class="table table-bordered">
+                           <thead>
+                              <tr>
+                                 <th class="th300">Spare Part</th>
+                                 <th class="th45">Quantity</th>
+                                 <th class="th45">Unit Price</th>
+                                 <th class="th45">Amount</th>
+                                 <th style="border: none;"></th>
+                              </tr>
+                           </thead>
+                           <tbody id="sparePartBody">
+                              <tr style="display: none;">
+                                 <td>
+                                    <select class="form-control w-100" name="sparePart" id="sparePart_###" index="###" onchange="fetchPrice(event,this)">
+                                       <option value="">-None-</option>
+                                    </select>
+                                    <textarea class='form-control' rows='5' name="s_description" id='s_description_###' index="###" placeholder="Description"></textarea>
+                                 </td>
+                                 <td><input type="number" class="form-control" name="s_quantity" id="s_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
+                                 <td><input type="text" class="form-control symbol-unit" name="s_unitPrice" id="s_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td><input type="text" class="form-control symbol-unit" name="s_amount" id="s_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="s_delete_###" index="###" onclick="delRow(this)"></i></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <button type="button" class="btn border" onClick="addRow(this,'sparePartBody')"><i class="fas fa-plus"></i> Add Row</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row pb-3 spareTotal">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline"></div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="sparePartTotal" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Spare Parts Total</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="sparePartTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="row pb-3 subTotal">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline"></div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="subTotal" class="mr-sm-2 justify-content-end">Sub Total</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="subTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="row pb-3 discountPrct">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline">
+            </div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="discountPercentage" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Discount Percentage</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="discountPercentage" disabled><span class="unitSymbol"><i class="fas fa-percentage"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="row pb-3 discount">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline">
+            </div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="discount" class="mr-sm-2 justify-content-end">Discount(-)</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="discount" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="row pb-3 ">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline">
+            </div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="email" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Save as Draft? </label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <div class="form-check-inline">
+                     <label class="form-check-label">
+                     <input type="radio" class="form-check-input" id="SAD_Yes" name="optradio1">Yes
+                     </label>
+                  </div>
+                  <div class="form-check-inline">
+                     <label class="form-check-label">
+                     <input type="radio" class="form-check-input" id="SAD_No" name="optradio1">No
+                     </label>
+                  </div>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="row pb-3 fTotal">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline">
+            </div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="total" class="mr-sm-2 justify-content-end"><b>Total</b></label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="total" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="row pb-3 ">
+            <div class="col-12">
+               <div class="w-25 d-block mx-auto text-center">
+                  <!-- <button type="submit" class="btn border " id="submitBtn" onclick="submitFun(this)" style="background:#ccc"> Submit</button>
+                  <button type="reset" class="btn border " id="cancelBtn"> Cancel</button> -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+   </body>
+   <script src="../js/functions.js"></script>
+   <script src="../js/script.js"></script>
+</html>

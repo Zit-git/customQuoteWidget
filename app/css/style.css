@@ -1,0 +1,177 @@
+html,
+body {
+	height: 100%;
+}
+
+.form-inline .form-control,
+.form-inline .custom-select,
+.form-inline .input-group,
+.form-control,
+table {
+	width: 80% !important
+}
+
+span.input-group-addon {
+	width: 30px;
+	background: #ccc;
+	padding: 5px 0 0 7px;
+}
+
+.form-inline label {
+	font-size: 14px;
+	text-align: right;
+}
+
+.red-color .fas {
+	color: #6c757d;
+	font-size: 26px;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+.form-inline .col-sm-3 {
+	padding: 0;
+}
+
+label span {
+	color: red;
+	margin-left: 3px;
+}
+
+.inside-label {
+	font-weight: 700;
+	font-size: 14px;
+	margin-bottom: 0;
+}
+
+.red-color {
+	text-align: left
+}
+
+.unitSymbol i {
+	margin-top: 15px;
+	font-size: 10px;
+}
+
+.unitSymbol {
+	width: 20px;
+	right: 5px;
+	position: absolute;
+}
+
+.symbol-unit {
+	width: 80% !important;
+	float: left;
+	padding-right: 30px;
+}
+
+.important {
+	border-left: 3px solid #eb7373;
+}
+
+.table-bordered thead td,
+.table-bordered thead th {
+	font-size: 14px
+}
+
+.table td {
+	position: relative;
+}
+
+.th45 {
+	width: 140px;
+}
+
+table .unitSymbol {
+	right: 20px
+}
+
+.form-control.symbol-unit {
+	width: 210px !important
+}
+
+table .form-control.symbol-unit {
+	width: 130px !important;
+}
+
+table .form-control {
+	width: 100% !important
+}
+
+textarea.form-control {
+	height: 70px !important;
+	margin-top: 10px;
+}
+
+.th300 {
+	width: 595px;
+}
+
+.table-bordered {
+	border: 0 !important
+}
+
+/* .w175 {
+	width: 175px;
+	flex: 0 0 42.333333%;
+	max-width: 401px;
+} */
+
+.form-control:hover{
+	border-color: #c3c6ca!important;
+    box-shadow: 0 0 6px #c3c6ca;
+    transition: box-shadow .1s ease-in-out;
+}
+
+.ash{
+	border: 1px solid #d0d4df!important;
+    padding: 6px 20px 7px;
+    color: #222833!important;
+    box-shadow: 0 -1px 0 0 #d0d4df inset!important;
+    background: transparent linear-gradient(#fcfdff,#eaeef5) 0 0 no-repeat padding-box!important;
+}
+
+.saveBtn{
+	border: 0!important;
+    box-shadow: 0 -2px 0 0 #0061ca inset!important;
+    background: transparent linear-gradient(
+0deg
+,#0279ff,#00a3f3) 0 0 no-repeat padding-box!important;
+    padding: 7px 20px 8px!important;
+}
+
+@media (max-width: 900px) {
+	.form-inline label {
+		text-align: left;
+	}
+	.hide-mobile {
+		display: none;
+	}
+	.w-25 {
+		width: 100% !important
+	}
+	.table-bordered thead td,
+	.table-bordered thead th,
+	.inside-label,
+	.table .unitSymbol i {
+		font-size: 9px;
+	}
+	.table .unitSymbol {
+		width: 9px
+	}
+	.form-inline .form-control,
+	.form-inline .custom-select,
+	.form-inline .input-group,
+	.symbol-unit,
+	.form-control,
+	table {
+		width: 100% !important
+	}
+	table th:first-child {
+		width: 200px;
+	}
+	.unitSymbol {}
+	.col-sm-5 label {
+		white-space: nowrap;
+	}
+}
