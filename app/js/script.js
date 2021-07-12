@@ -1,4 +1,6 @@
 //Fields and Global Varibales
+// new time
+// 3rd
 var currDate = new Date();
 var productsDataLis = [];
 var productsRelations = {};
