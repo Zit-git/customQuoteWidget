@@ -55,50 +55,46 @@ function roundToTwo(num) {
     return +(Math.round(num + "e+2")  + "e-2");
 }
 var calcTotal = () =>{
-	var subTotal = document.getElementById("subTotal");
-	var discountPercentage = document.getElementById("discountPercentage");
-	var discount = document.getElementById("discount");
-	var total = document.getElementById("total");
+	let subTotal = document.getElementById("subTotal");
+	let discountPercentage = document.getElementById("discountPercentage");
+	let discount = document.getElementById("discount");
+	let totalAmount = document.getElementById("totalAmount");
 	subTotalVal = 0;
 	for (let i in totalMap){
 		currTotalVal = totalMap[i].value || 0;
 		subTotalVal += Number(currTotalVal);
 	}
 	subTotal.value = roundToTwo(subTotalVal);
-	discountPercntVal = discountPercentage.value ? discountPercentage.value / 100 : 0;
-	discountVal = subTotalVal * discountPercntVal;
-	discount.value = discountVal;
-	total.value = subTotalVal - discountVal;
+	let discountPercntVal = discountPercentage.value ? discountPercentage.value / 100 : 0;
+	let discountVal = subTotalVal * discountPercntVal;
+	discount.value = roundToTwo(discountVal);
+	totalAmount.value = roundToTwo(subTotalVal - discountVal);
 }
-function fetchPrice(event,thisVal) {
-	var firstLtr = thisVal.name.substring(0,1); // p or a or s
-    var rowIndex = thisVal.getAttribute("index");
-	var productId = event.target.value;
-	var description = document.getElementById(firstLtr+"_description_"+rowIndex);
-	var quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
-	var unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
-	var amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
-	// var descriptionVal = $('option:selected', thisVal).attr('description');
-	// var unitPriceVal = $('option:selected', thisVal).attr('price') || 0;
-	var descriptionVal = "";
-	var unitPriceVal = 0;
-	var quantityVal = quantity.value || 0;
-	for(product of productsDataLis){
-		if(product.id == productId){
-			unitPriceVal = product.Unit_Price;
-			descriptionVal = product.Description;
-		}
-	}
-	description.value = descriptionVal != "null" ? descriptionVal: "";
+async function fetchPrice(event,thisVal) {
+	let productId = thisVal.value;
+	if(productId){
+	let crmProductSingle = await getSingleRecord("Products",productId);
+	console.log(crmProductSingle);
+	let firstLtr = thisVal.name.substring(0,1); // p or a or s
+    let rowIndex = thisVal.getAttribute("index");
+	let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
+	let unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
+	let description = document.getElementById(firstLtr+"_description_"+rowIndex);
+	let amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
+	let quantityVal = quantity.value || 0;
+	let unitPriceVal = crmProductSingle.Unit_Price;
+	let descriptionVal = crmProductSingle.Description || "";
+	description.value = descriptionVal;
 	unitPrice.value = unitPriceVal;
 	amount.value = quantityVal * unitPriceVal;
-	var tabTotalVal = 0;
+	let tabTotalVal = 0;
 	tabTotal = conMap[firstLtr];
 	for(let amount of tabTotal){
 		tabTotalVal += Number(amount.value);
 	}
 	totalMap[firstLtr].value = roundToTwo(tabTotalVal);
 	calcTotal();
+}
 }
 function calcAmount(event,thisVal){
 	var firstLtr = thisVal.name.substring(0,1); // p or a or s
@@ -300,7 +296,7 @@ function showDetail(thisVal){
 		}
 		require(["pumpType"],"id");
 		// require(["series","shaftSpeed","size"],"id");
-		// require(["pumpType","applicationType","specifiGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
+		// require(["pumpType","applicationType","specificGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
 		// require(["casingMoc","shaftSealing","impellerMoc","sealingGlandFlushing","lubrication","flangeDrilling"],"id");
 	} else if(thisVal.value == 'yes') {
 		// Route 1 No API
@@ -320,7 +316,7 @@ function showDetail(thisVal){
 		for(let i of $("#detailSession :input")){
 			notRequire([i.id],"id");
 		}
-		// notRequire(["applicationType","specifiGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
+		// notRequire(["applicationType","specificGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
 		// require(["pumpType","series","shaftSpeed","size","casingMoc","shaftSealing","impellerMoc","sealingGlandFlushing","lubrication","flangeDrilling"],"id");
 	}
 }
@@ -338,7 +334,7 @@ function showDetailElse(){
 		notRequire([i.id],"id");
 	}
 	// notRequire(["series","shaftSpeed","size"],"id");
-	// notRequire(["pumpType","applicationType","specifiGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
+	// notRequire(["pumpType","applicationType","specificGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
 	// notRequire(["casingMoc","shaftSealing","impellerMoc","sealingGlandFlushing","lubrication","flangeDrilling"],"id");
 }
 

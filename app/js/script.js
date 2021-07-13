@@ -10,9 +10,9 @@ var crmSizes;
 var apiTableData;
 var emptyOpt = '<option value="">-None-</option>';
 var subject = document.getElementById("subject");
-var accountName = document.getElementById("accountName");
+var customerName = document.getElementById("customerName");
 var contactName = document.getElementById("contactName");
-var dealName = document.getElementById("dealName");
+var enquiryName = document.getElementById("enquiryName");
 var productType = document.getElementById("productType");
 var accessoryType = document.getElementById("accessoryType");
 var brand = document.getElementById("brand");
@@ -26,7 +26,7 @@ var shaftSpeed = document.getElementById("shaftSpeed");
 var size = document.getElementById("size");
 var flowRate = document.getElementById("flowRate");
 var flowRateUnit = document.getElementById("flowRateUnit");
-var specifiGravity = document.getElementById("specifiGravity");
+var specificGravity = document.getElementById("specificGravity");
 var head = document.getElementById("head");
 var headUnit = document.getElementById("headUnit");
 var temperature = document.getElementById("temperature");
@@ -52,12 +52,13 @@ var pumpTotal = document.getElementById("pumpTotal");
 var accessoryTotal = document.getElementById("accessoryTotal");
 var sparePartTotal = document.getElementById("sparePartTotal");
 var discountPercentage = document.getElementById("discountPercentage");
+var discount = document.getElementById("discount");
 var conMap = {p:pumpAmtLis,a:accessoryAmtLis,s:sparePartAmtLis};
 var totalMap = {p:pumpTotal,a:accessoryTotal,s:sparePartTotal};
 // Expressions
 productType.onchange = typeChange;
 quoteDate.valueAsDate  = currDate;
-//quoteDate.valueAsDate.toISOString();
+//console.log(quoteDate.value); //quoteDate.valueAsDate.toISOString();
 require([subject.id,contactName.id,productType.id],"id");
 require(["optradio1"],"name");
 // Add row button code - start
@@ -157,7 +158,6 @@ async function addRow(thisVal,tabBody){
 					appendTabRow(tabBody,rowVal);
 					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
 					rowCount[tabBody]++;
-					// console.log(finalPump);
 					let rowField = document.getElementById(conMap[tabBody]+rowVal);
 					let pumpSpec = document.getElementById("p_specs_"+rowVal);
 					pumpSpec.value = apiSpecs;
@@ -175,17 +175,14 @@ async function addRow(thisVal,tabBody){
 }
 // Add row button code - end
 document.getElementById("searchBtn").onclick = event => {
-	// Route 1 API
 	let mandatoryCheck = true;
 	for(let i of $("#basicSession :input")){
 		if(i.value == "" && i.id == "pumpType"){
-			console.log(i);
 			mandatoryCheck = false;
 		}
 	}
 	for(let i of $("#detailSession :input")){
 		if(i.value == "" && i.id != "searchBtn"){
-			console.log(i);
 			mandatoryCheck = false;
 		}
 	}
@@ -198,7 +195,7 @@ document.getElementById("searchBtn").onclick = event => {
 			}
 		});
 		let applicationTypeAPI = crmAppTypeSingle.Name;
-		var params = {fld1:pumpTypeAPI,fld2:applicationTypeAPI,fld3:flowRate.value,fld4:"m3/hr",fld5:head.value,fld6:"m",fld7:temperature.value,fld8:"",fld9:specifiGravity.value,fld10:shaftSpeed_API.value};
+		var params = {fld1:pumpTypeAPI,fld2:applicationTypeAPI,fld3:flowRate.value,fld4:"m3/hr",fld5:head.value,fld6:"m",fld7:temperature.value,fld8:"",fld9:specificGravity.value,fld10:shaftSpeed_API.value};
 		Object.keys(params).forEach(key => fetchUrl.searchParams.append(key, params[key]));
 		console.log(fetchUrl);
 		fetch(fetchUrl)
@@ -263,12 +260,61 @@ var seriesOnChange = async seriesVal => {
 }
 function submitFun(thisVal){
 	// var fields = document.getElementsByClassName("important");
-	// for(i of fields){
+	// for(let i of fields){
 	// 	if(i.value == ""){
 	// 		return false;
 	// 	}
 	// }
+	// if(!$("#SAD_Yes")[0].checked && !$("#SAD_No")[0].checked){
+	// 	return false;
+	// }
+	alert("test");
+	let subDataList = [];
+	[pumpLis,accessoryLis,sparePartLis].forEach(subEach => {
+		subEach.forEach(data => {
+			if(data.value){
+				let firstLtr = data.name.substring(0,1); // p or a or s
+				let rowIndex = data.getAttribute("index");
+				let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
+				let dataMap = {product:data.value,quantity:Number(quantity.value)};
+				subDataList.push(dataMap);
+			}
+		});
+	});
+	let quoteData = {
+		id: "156506000001738053",
+		Subject:subject.value,
+		Account_Name:customerName.value,
+		Deal_Name:enquiryName.value,
+		Product_Type:productType.value,
+		Quote_Stage:quoteStage.value,
+		Quote_Date:quoteDate.value,
+		Customer_Plant:$("#customerPlant")[0].value,
+		Cust_Equiment_Number:$("#custEquipmentNumber")[0].value,
+		Cust_Equiment_Name:$("#custEquipmentName")[0].value,
+		Liquid_Name:$("#liquidName")[0].value,
+		Brand:brand.value,
+		Accessory_Type: accessoryType.value,
+		Discount:discountPercentage.value+"%",
+		Product_Details:subDataList
+	};
+// ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData,Trigger:[]}).then(function(data){
+// 	console.log(data);
+// 	});
+	var config={
+		Entity:"Quotes",
+		APIData:quoteData,
+		Trigger:[]
+	  }
+	//   console.log(config);
+	  ZOHO.CRM.API.updateRecord(config)
+	  .then(function(data){
+		  console.log(data);
+	  });
+	// console.log(subDataList);
+	return false;
 }
+document.getElementById("quoteForm").onsubmit = function(){return submitFun();}
 	// Subscribe to the EmbeddedApp onPageLoad event before initializing the widget
 ZOHO.embeddedApp.on("PageLoad",function(etData){
 	asyncFun = async () =>{
@@ -313,35 +359,30 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	}
 	var crmContacts = await getRecords("Contacts");
 	contactName.innerHTML =emptyOpt+crmContacts.map(data => {
-		let attr = "";
-		if(crmContacts.length == 1 ){
-			attr = "selected";
-			discountPercentage.value = data.Discount || 0;
-		}
-		return '<option value="'+data.id+'" '+attr+'>'+data.Full_Name+'</option>';
+		return '<option value="'+data.id+'">'+data.Full_Name+'</option>';
 	}).join("");
 	contactName.onchange = event => {
-		crmContacts.forEach(val => {
-			if(val.id == contactName.value){
-				discountPercentage.value = val.Discount || 0;
+		crmContacts.forEach(data => {
+			if(data.id == contactName.value){
+				let accountData = data.Account_Name || {};
+				let accId = accountData.id || "-None-";
+				let accName = accountData.name || "-None-";
+				customerName.innerHTML = '<option value="'+accId+'" selected>'+accName+'</option>';
+				discountPercentage.value = data.Discount || 0;
 			}
 		});
 	}
-	var crmAccounts = await getRecords("Accounts");
-	accountName.innerHTML =emptyOpt+crmAccounts.map(data => '<option value="'+data.id+'">'+data.Account_Name+'</option>').join("");
 	var crmDeals = await getRecords("Deals");
-	dealName.innerHTML =emptyOpt+crmDeals.map(data => '<option value="'+data.id+'">'+data.Deal_Name+'</option>').join("");
+	enquiryName.innerHTML =emptyOpt+crmDeals.map(data => '<option value="'+data.id+'">'+data.Deal_Name+'</option>').join("");
 	crmPumpTypes = await getRecords("Pump_Types");
-	// console.log(JSON.parse(crmPumpTypes[0].Related_Data));
-	// var crmApplicationTypes = await getRecords("Application_Types");
 	crmSeries = await getRecords("Series");
 	crmSizes = await getRecords("Sizes");
 	pumpType.innerHTML = emptyOpt+crmPumpTypes.map(data => '<option value="'+data.id+'">'+data.Name+'</option>').join("");
 	pumpType.onchange = event => {
 		// Application Type & Series
 		crmPumpTypes.forEach(val => {
-			if(val.id == pumpType.value){
-				relatedData = JSON.parse(val.Related_Data);
+			relatedData = JSON.parse(val.Related_Data || {});
+			if(val.id == pumpType.value && !jQuery.isEmptyObject(relatedData)){
 				applicationType.innerHTML = emptyOpt+relatedData.Application_Type.map(data => '<option value="'+data.id+'">'+data.name+'</option>').join("");
 				series.innerHTML = emptyOpt+relatedData.Series.map(data => '<option value="'+data.id+'">'+data.name+'</option>').join("");
 			}
@@ -374,7 +415,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	applicationType.onchange = async event => {
 		temperature.value = "";
 		shr.value = "";
-		specifiGravity.value = "";
+		specificGravity.value = "";
 		if(applicationType.value){
 		crmAppTypeSingle = await getSingleRecord("Application_Types",applicationType.value);
 		}
@@ -435,19 +476,19 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 			shr.value = "";
 		}
 	}
-	specifiGravity.onchange = event => {
-		let specifiGravityVal = Number(specifiGravity.value);
+	specificGravity.onchange = event => {
+		let specificGravityVal = Number(specificGravity.value);
 		if(applicationType.value){
 			let SpGMin = crmAppTypeSingle.Specific_Gravity_Min;
 			let SpGMax = crmAppTypeSingle.Specific_Gravity_Max;
-			if(specifiGravityVal < SpGMin || specifiGravityVal > SpGMax){
+			if(specificGravityVal < SpGMin || specificGravityVal > SpGMax){
 				swal("Enter Specific Gravity Value "+ SpGMin+" - "+SpGMax,"","warning");
-				specifiGravity.value = "";
+				specificGravity.value = "";
 			}
 		}
 		else{
 			swal("Select application type","","warning");
-			specifiGravity.value = "";
+			specificGravity.value = "";
 		}
 
 	}

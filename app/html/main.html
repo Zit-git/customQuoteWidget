@@ -17,15 +17,15 @@
       <script src="../js/lib/ZohoEmbededAppSDK.min.js"></script>
    </head>
    <body>
-      <form>
+      <form id="quoteForm">
          <nav class="navbar navbar-expand-sm  bg-white navbar-white fixed-top mb-5  border-bottom " >
             <h4 class="w-50" id="titleTxt">Create Quote</h4>
             <ul class="navbar-nav justify-content-end w-50">
               <li class="nav-item">
-               <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn" onclick="">Cancel</button>
+               <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn">Cancel</button>
               </li>
               <li class="nav-item">
-                <button type="submit" class="btn btn-primary saveBtn" id="submitBtn" onclick="submitFun(this)">Save</button>
+                <button type="submit" class="btn btn-primary saveBtn" id="submitBtn">Save</button>
               </li>
             </ul>
           </nav>
@@ -46,7 +46,7 @@
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="quoteStage" class="mr-sm-2 justify-content-end">Quote Stage</label>
+               <label for="quoteStage" class="mr-sm-2 justify-content-end">Quotation Stage</label>
             </div>
             <div class="col-sm-8 col-12">
                <select class="form-control w-100" id="quoteStage" disabled>
@@ -68,7 +68,7 @@
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="quoteDate" class="mr-sm-2 justify-content-end">Quoto Date</label>
+               <label for="quoteDate" class="mr-sm-2 justify-content-end">Quotation Date</label>
             </div>
             <div class="col-sm-8 col-12">
                <!-- <div class="input-group date" data-date-format="mm-dd-yyyy"> -->
@@ -81,40 +81,40 @@
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-3 col-12">
-               <label for="accountName" class="mr-sm-2 justify-content-end">Account Name</label>
+               <label for="customerName" class="mr-sm-2 justify-content-end">Customer Name</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="accountName">
+               <select class="form-control w-100" id="customerName">
                   <option value="">-None-</option>
                </select>
             </div>
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="plant" class="mr-sm-2 justify-content-end">Plant</label>
+               <label for="customerPlant" class="mr-sm-2 justify-content-end">Customer Plant</label>
             </div>
             <div class="col-sm-8 col-12">
-               <input type="text" class="form-control" id="plant">
+               <input type="text" class="form-control" id="customerPlant">
             </div>
          </div>
       </div>
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-3 col-12">
-               <label for="dealName" class="mr-sm-2 justify-content-end">Deal Name</label>
+               <label for="enquiryName" class="mr-sm-2 justify-content-end">Enquiry Name</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="dealName">
+               <select class="form-control w-100" id="enquiryName">
                   <option value="">-None-</option>
                </select>
             </div>
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="equipmentNumber" class="mr-sm-2 justify-content-end">Equipment Number</label>
+               <label for="custEquipmentNumber" class="mr-sm-2 justify-content-end">Cust. Equiment Number</label>
             </div>
             <div class="col-sm-8 col-12">
-               <input type="text" class="form-control" id="equipmentNumber">
+               <input type="text" class="form-control" id="custEquipmentNumber">
             </div>
          </div>
       </div>
@@ -134,10 +134,10 @@
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="equipmentName" class="mr-sm-2 justify-content-end">Equipment Name</label>
+               <label for="custEquipmentName" class="mr-sm-2 justify-content-end">Cust. Equiment Name</label>
             </div>
             <div class="col-sm-8 col-12">
-               <input type="text" class="form-control" id="equipmentName">
+               <input type="text" class="form-control" id="custEquipmentName">
             </div>
          </div>
       </div>
@@ -154,17 +154,17 @@
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="liquid" class="mr-sm-2 justify-content-end">Liquid</label>
+               <label for="liquidName" class="mr-sm-2 justify-content-end">Liquid Name</label>
             </div>
             <div class="col-sm-8 col-12">
-               <input type="text" class="form-control" id="liquid">
+               <input type="text" class="form-control" id="liquidName">
             </div>
          </div>
       </div>
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12 dyk">
-               <label for="email" class="mr-sm-2 justify-content-end">Do you know Series/Size/Model?</label>
+               <label for="email" class="mr-sm-2 justify-content-end">Do you know the product series and size?</label>
             </div>
             <div class="col-sm-8 col-12 dyk">
                <div class="form-check-inline">
@@ -222,7 +222,7 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-4 col-12">
-                     <label for="shaftSpeed" class="mr-sm-2 justify-content-end">Shaft Speed(rpm)</label>
+                     <label for="shaftSpeed" class="mr-sm-2 justify-content-end">Shaft speed (rpm)</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="shaftSpeed">
@@ -263,10 +263,10 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-4 col-12">
-                     <label for="specifiGravity" class="mr-sm-2 justify-content-end">Specifi Gravity</label>
+                     <label for="specificGravity" class="mr-sm-2 justify-content-end">Specific Gravity</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <input type="number" class="form-control" id="specifiGravity">
+                     <input type="number" class="form-control" id="specificGravity">
                   </div>
                </div>
             </div>
@@ -466,7 +466,7 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="lubrication" class="mr-sm-2 justify-content-end">Lubrication</label>
+                     <label for="lubrication" class="mr-sm-2 justify-content-end">Bearing Lubrication</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="lubrication">
@@ -517,6 +517,7 @@
                               <td class="red-color" style="border: none;">
                                  <i class="fas fa-times-circle" id="p_delete_###" index="###" onclick="delRow(this)"></i>
                                  <textarea class="form-control" rows="5" name="p_specs" id="p_specs_###" index="###"></textarea>
+                                 <textarea class="form-control" rows="5" name="selectData" id="p_selectData_###" index="###"></textarea>
                               </td>
                            </tr>
                         </tbody>
@@ -713,10 +714,10 @@
             </div>
             <div class="col-sm-4 col-6 form-inline w175">
                <div class="col-sm-5 col-12">
-                  <label for="total" class="mr-sm-2 justify-content-end"><b>Total</b></label>
+                  <label for="totalAmount" class="mr-sm-2 justify-content-end"><b>Total Amount</b></label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="total" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit" id="totalAmount" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
