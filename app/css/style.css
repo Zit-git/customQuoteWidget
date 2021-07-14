@@ -133,6 +133,7 @@ textarea.form-control {
 
 .saveBtn{
 	border: 0!important;
+	color: white;
     box-shadow: 0 -2px 0 0 #0061ca inset!important;
     background: transparent linear-gradient(
 0deg
@@ -170,7 +171,7 @@ textarea.form-control {
 	table th:first-child {
 		width: 200px;
 	}
-	.unitSymbol {}
+	/* .unitSymbol {} */
 	.col-sm-5 label {
 		white-space: nowrap;
 	}

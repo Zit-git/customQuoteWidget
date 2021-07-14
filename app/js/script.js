@@ -2,12 +2,12 @@
 var currDate = new Date();
 var productsDataLis = [];
 var productsRelations = {};
+var apiTableData;
 var crmPumpTypes;
 var crmAppTypeSingle;
 var crmSeries;
 var crmSeriesSingle;
 var crmSizes;
-var apiTableData;
 var emptyOpt = '<option value="">-None-</option>';
 var subject = document.getElementById("subject");
 var customerName = document.getElementById("customerName");
@@ -41,7 +41,7 @@ var impellerMoc = document.getElementById("impellerMoc");
 var sealingGlandFlushing = document.getElementById("sealingGlandFlushing");
 var lubrication = document.getElementById("lubrication");
 var flangeDrilling = document.getElementById("flangeDrilling");
-//Table Variables
+//Table Fields
 var pumpLis = document.getElementsByName("pump");
 var pumpAmtLis = document.getElementsByName("p_amount");
 var accessoryLis = document.getElementsByName("accessory");
@@ -72,7 +72,6 @@ async function addRow(thisVal,tabBody){
 		let serSeries = "";
 		let serSize = "";
 		let serSpeed = "";
-		let apiSpecs;
 		if(document.getElementById("DYK_Yes").checked && tabBody == "pumpBody"){
 			// Route 2 No API
 			mandatoryCheck = true;
@@ -87,10 +86,9 @@ async function addRow(thisVal,tabBody){
 					mandatoryCheck = false;
 				}
 			}
-			serSeries = series.value;
+			serSeries = series.value;//series.options[series.selectedIndex].text;
 			serSize = size.value;
 			serSpeed = shaftSpeed.value;
-			apiSpecs = "Route 2";
 		}
 		else if(document.getElementById("DYK_No").checked && tabBody == "pumpBody"){
 			// Route 1 API
@@ -100,10 +98,15 @@ async function addRow(thisVal,tabBody){
 			seriesChk.forEach(thisVal => {
 				if(thisVal.checked){
 					let rowIndex = thisVal.getAttribute("index");
+					let apiSelectedData = apiTableData[rowIndex];
 					serSeries = document.getElementById("SERIES_"+rowIndex).value;
 					serSize = document.getElementById("SIZE_"+rowIndex).value;
 					serSpeed = document.getElementById("SPEED_"+rowIndex).value;
-					apiSpecs = JSON.stringify(apiTableData[rowIndex]);
+					let effVal = apiSelectedData.EFFICIENCY+"%";
+					let motorRatVal = apiSelectedData.MOTOR_RATING_KW || "";
+					let shaftPwr = apiSelectedData.SHAFT_POWER || "";
+					apiSpecs = "Flow rate: "+flowRate.value+",  Head: "+head.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+$("#liquidName")[0].value+",  ";
+					selectData.apiTableData = apiSelectedData;
 				}
 			});
 			if(serSeries != ""){
@@ -112,8 +115,16 @@ async function addRow(thisVal,tabBody){
 						mandatoryCheck = false;
 					}
 				}
+				let detailDataMap = {};
+				for(let i of $("#detailSession :input")){
+					if(i.parentNode.tagName == "DIV" && i.type != "button"){
+					detailDataMap[i.id] = i.value;
+					}
+				}
+				selectData = {...selectData, ...detailDataMap};
 			}
 			else{
+				mandatoryCheck = false;
 				swal("Invalid Selection","Select any one of the result in the pump specification list or Click the SEARCH Button","info");
 			}
 		}
@@ -135,17 +146,19 @@ async function addRow(thisVal,tabBody){
 			});	
 		}
 		if(mandatoryCheck && routeMethod){
-			var searchMap = {Pump_Type:pumpType.value,Series:serSeries,Shaft_Speed:serSpeed,Size:serSize};
-			var filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
-			var searchQuery = "(";
+			let searchMap = {Pump_Type:pumpType.value,Series:serSeries,Shaft_Speed:serSpeed,Size:serSize};
+			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
+			selectData = {...selectData, ...searchMap, ...filterMap};
+			console.log(selectData);
+			let searchQuery = "(";
 			for(let key in searchMap){
 				searchQuery += "("+key+":equals:"+searchMap[key]+")and";
 			}
 			searchQuery = searchQuery.endsWith("and") ? searchQuery.slice(0,searchQuery.length - 3) + ")" : searchQuery + ")";
 			console.log(searchQuery);
-			var resPump = await searchRecord("Products",searchQuery) || [];
+			let resPump = await searchRecord("Products",searchQuery) || [];
 			console.log(resPump);
-				var finalPump = resPump.filter(val => {
+				let finalPump = resPump.filter(val => {
 					let rtnVal = true;
 					for(key in filterMap){
 						if(val[key] != filterMap[key]){
@@ -159,8 +172,10 @@ async function addRow(thisVal,tabBody){
 					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
 					rowCount[tabBody]++;
 					let rowField = document.getElementById(conMap[tabBody]+rowVal);
-					let pumpSpec = document.getElementById("p_specs_"+rowVal);
-					pumpSpec.value = apiSpecs;
+					// let pumpSpec = document.getElementById("p_specs_"+rowVal);
+					// let pumpSelectData = document.getElementById("p_selectData_"+rowVal);
+					// pumpSpec.value = JSON.stringify(apiSpecs);
+					// pumpSelectData.value = JSON.stringify(selectData);
 					rowField.innerHTML = emptyOpt+finalPump.map(data => {
 						return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
 					}).join("");
@@ -176,17 +191,14 @@ async function addRow(thisVal,tabBody){
 // Add row button code - end
 document.getElementById("searchBtn").onclick = event => {
 	let mandatoryCheck = true;
-	for(let i of $("#basicSession :input")){
-		if(i.value == "" && i.id == "pumpType"){
-			mandatoryCheck = false;
-		}
-	}
 	for(let i of $("#detailSession :input")){
 		if(i.value == "" && i.id != "searchBtn"){
 			mandatoryCheck = false;
 		}
 	}
 	if(mandatoryCheck){
+		$('#loadingDiv').show();
+		$('#searchBtn').hide();
 		var fetchUrl = new URL("http://test.makemypump.com:8288//api/Curve/GetCurveTest");
 		let pumpTypeAPI;
 		crmPumpTypes.forEach(val => {
@@ -199,7 +211,11 @@ document.getElementById("searchBtn").onclick = event => {
 		Object.keys(params).forEach(key => fetchUrl.searchParams.append(key, params[key]));
 		console.log(fetchUrl);
 		fetch(fetchUrl)
-		.then(resp => resp.json(), err => swal("Unkown Error",err.toString(),"warning"))
+		.then(resp => resp.json(), err => {
+			swal("Unkown Error",err.toString(),"warning");
+			$('#loadingDiv').hide();
+			$('#searchBtn').show();
+		})
 		.then(data => {
 			if(data.Table1){
 				apiTableData = data.Table1;
@@ -224,6 +240,8 @@ document.getElementById("searchBtn").onclick = event => {
 			else{
 				swal("Unkown Error",data.toString(),"warning");
 			}
+			$('#loadingDiv').hide();
+			$('#searchBtn').show();
 		});
 	}
 	else{

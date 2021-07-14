@@ -1,4 +1,6 @@
 // Refer script.js global varibales for any unkown variables
+var selectData = {};
+var apiSpecs = "";
 // General Functions - start
 var getSuffix = (suf,str) => str.substring(str.indexOf(suf)+1,str.length);
 var getPrefix = (prf,str) => str.substring(0,str.indexOf(prf));
@@ -77,6 +79,13 @@ async function fetchPrice(event,thisVal) {
 	console.log(crmProductSingle);
 	let firstLtr = thisVal.name.substring(0,1); // p or a or s
     let rowIndex = thisVal.getAttribute("index");
+	let pumpSpec = document.getElementById(firstLtr+"_specs_"+rowVal);
+	let pumpSelectData = document.getElementById(firstLtr+"_selectData_"+rowVal);
+	if(pumpSpec && pumpSelectData){
+		let finalTxt = "Datasheet ref nr: "+ crmProductSingle.TDS_Ref + " ( For operating limits and warranty conditions check the datasheet )";
+		pumpSpec.value = JSON.stringify(apiSpecs +finalTxt);
+		pumpSelectData.value = JSON.stringify(selectData);
+	}
 	let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
 	let unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
 	let description = document.getElementById(firstLtr+"_description_"+rowIndex);
