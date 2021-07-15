@@ -172,10 +172,6 @@ async function addRow(thisVal,tabBody){
 					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
 					rowCount[tabBody]++;
 					let rowField = document.getElementById(conMap[tabBody]+rowVal);
-					// let pumpSpec = document.getElementById("p_specs_"+rowVal);
-					// let pumpSelectData = document.getElementById("p_selectData_"+rowVal);
-					// pumpSpec.value = JSON.stringify(apiSpecs);
-					// pumpSelectData.value = JSON.stringify(selectData);
 					rowField.innerHTML = emptyOpt+finalPump.map(data => {
 						return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
 					}).join("");
@@ -287,6 +283,7 @@ function submitFun(thisVal){
 	// 	return false;
 	// }
 	alert("test");
+	console.log(subCustomData);
 	let subDataList = [];
 	[pumpLis,accessoryLis,sparePartLis].forEach(subEach => {
 		subEach.forEach(data => {
@@ -294,7 +291,8 @@ function submitFun(thisVal){
 				let firstLtr = data.name.substring(0,1); // p or a or s
 				let rowIndex = data.getAttribute("index");
 				let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
-				let dataMap = {product:data.value,quantity:Number(quantity.value)};
+				let description = document.getElementById(firstLtr+"_description_"+rowIndex);
+				let dataMap = {product:data.value,quantity:Number(quantity.value),product_description:description.value};
 				subDataList.push(dataMap);
 			}
 		});
@@ -319,16 +317,16 @@ function submitFun(thisVal){
 // ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData,Trigger:[]}).then(function(data){
 // 	console.log(data);
 // 	});
-	var config={
-		Entity:"Quotes",
-		APIData:quoteData,
-		Trigger:[]
-	  }
-	//   console.log(config);
-	  ZOHO.CRM.API.updateRecord(config)
-	  .then(function(data){
-		  console.log(data);
-	  });
+	// var config={
+	// 	Entity:"Quotes",
+	// 	APIData:quoteData,
+	// 	Trigger:[]
+	//   }
+	// //   console.log(config);
+	//   ZOHO.CRM.API.updateRecord(config)
+	//   .then(function(data){
+	// 	  console.log(data);
+	//   });
 	// console.log(subDataList);
 	return false;
 }

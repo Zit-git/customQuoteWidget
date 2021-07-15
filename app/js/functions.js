@@ -1,6 +1,7 @@
 // Refer script.js global varibales for any unkown variables
 var selectData = {};
 var apiSpecs = "";
+var subCustomData = [];
 // General Functions - start
 var getSuffix = (suf,str) => str.substring(str.indexOf(suf)+1,str.length);
 var getPrefix = (prf,str) => str.substring(0,str.indexOf(prf));
@@ -78,14 +79,12 @@ async function fetchPrice(event,thisVal) {
 	let crmProductSingle = await getSingleRecord("Products",productId);
 	console.log(crmProductSingle);
 	let firstLtr = thisVal.name.substring(0,1); // p or a or s
-    let rowIndex = thisVal.getAttribute("index");
-	let pumpSpec = document.getElementById(firstLtr+"_specs_"+rowVal);
-	let pumpSelectData = document.getElementById(firstLtr+"_selectData_"+rowVal);
-	if(pumpSpec && pumpSelectData){
+	if(firstLtr == "p"){ //pump
 		let finalTxt = "Datasheet ref nr: "+ crmProductSingle.TDS_Ref + " ( For operating limits and warranty conditions check the datasheet )";
-		pumpSpec.value = JSON.stringify(apiSpecs +finalTxt);
-		pumpSelectData.value = JSON.stringify(selectData);
+		let cusTempMap = {Product_Id:crmProductSingle.id,Specification:apiSpecs +finalTxt,Select_Data:selectData};
+		subCustomData.push(cusTempMap);
 	}
+    let rowIndex = thisVal.getAttribute("index");
 	let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
 	let unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
 	let description = document.getElementById(firstLtr+"_description_"+rowIndex);
@@ -157,8 +156,15 @@ var notRequire = (values,by) => {
 }
 }
 var getRecords = async entity =>{
-	var response = await ZOHO.CRM.API.getAllRecords({Entity:entity});
-	return response.data;
+	let responseData = [], pageVal = 1;
+	do {
+		let response = await ZOHO.CRM.API.getAllRecords({Entity:entity,page:pageVal,per_page:200});
+		responseData = [...responseData,...response.data];
+		pageVal++;
+		var boolVal = response.info.more_records;
+	}
+	while (boolVal);
+	return responseData;
 }
 var getSingleRecord = async (entity,RecID) =>{
 	var response = await ZOHO.CRM.API.getRecord({Entity:entity,RecordID:RecID});
