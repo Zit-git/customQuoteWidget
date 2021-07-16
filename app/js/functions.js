@@ -183,14 +183,10 @@ var getFields = async entity =>{
 	return response.fields;
 }
 // General Functions - end
-// Date fields setup - start
-// $("#quoteDate").datepicker({
-// 	autoclose: true,
-// 	todayHighlight: true
-// }).datepicker('update', new Date());
-// Date fields setup - end
-
 //Hide and Show - start
+// $('#pumpTotal')[0].value = 0;
+// $('#accessoryTotal')[0].value = 0;
+// $('#spareTotal')[0].value = 0;
 $('.basic-session, .detail-session, .pumpInfo-session, .pump-session, .accessory-session, .spare-session').hide();
 $('.dyk').hide();
 $('.pumpTotal').hide();
@@ -202,8 +198,6 @@ $('.discount').hide();
 $('.fTotal').hide();
 $('.apiTable').hide();
 hide("accessoryType","select");
-// $('#productType').on('change', function () {
-	// document.getElementById("productType").onchange = function () {
 function typeChange(){		
 	if (this.value === "Pump") {
 		$('.pump-session, .accessory-session, .spare-session').show();
@@ -216,17 +210,14 @@ function typeChange(){
 		$('.discount').show();
 		$('.fTotal').show();
 		hide("accessoryType","select");
-		// notRequire(["accessoryType"],"id");
 		clearTabRow("pumpBody");
 		clearTabRow("accessoryBody");
-		clearTabRow("sparePartBody");	
-		// appendTabRow("pumpBody",1);
-		// appendTabRow("accessoryBody",1);
-		// appendTabRow("sparePartBody",1);		
-		// require(["pump_1","accessory_1","sparePart_1","p_quantity_1","a_quantity_1","s_quantity_1"],"id");
+		clearTabRow("sparePartBody");
+		$('#pumpTotal')[0].value = 0;
+		$('#accessoryTotal')[0].value = 0;
+		$('#sparePartTotal')[0].value = 0;	
 	} else if (this.value === "Accessory") {
 		show("accessoryType","select");
-		// require(["accessoryType"],"id");
 		$('.pump-session, .spare-session').hide();
 		$('.accessory-session').show();
 		$('.dyk').hide();
@@ -243,9 +234,10 @@ function typeChange(){
 		clearTabRow("pumpBody");
 		clearTabRow("accessoryBody");
 		clearTabRow("sparePartBody");
+		$('#pumpTotal')[0].value = 0;
+		$('#accessoryTotal')[0].value = 0;
+		$('#sparePartTotal')[0].value = 0;	
 		showDetailElse();
-		// appendTabRow("accessoryBody",1);
-		// notRequire(["pump_1","sparePart_1","p_quantity_1","s_quantity_1"],"id");
 	} else if (this.value === "Spare Part") {
 		$('.pump-session, .accessory-session').hide();
 		$('.spare-session').show();
@@ -261,14 +253,13 @@ function typeChange(){
 		$('.detail-session').hide();
 		$('.pumpInfo-session').hide();
 		hide("accessoryType","select");
-		// notRequire(["accessoryType"],"id");
 		clearTabRow("pumpBody");
 		clearTabRow("accessoryBody");
 		clearTabRow("sparePartBody");
+		$('#pumpTotal')[0].value = 0;
+		$('#accessoryTotal')[0].value = 0;
+		$('#sparePartTotal')[0].value = 0;	
 		showDetailElse();
-		// appendTabRow("sparePartBody",1);
-		// require(["sparePart_1","a_sparePart_1"],"id");
-		// notRequire(["pump_1","accessory_1","p_quantity_1","a_quantity_1"],"id");
 	} else {
 		$('.pump-session, .accessory-session, .spare-session').hide();
 		$('.dyk').hide();
@@ -283,10 +274,12 @@ function typeChange(){
 		$('.detail-session').hide();
 		$('.pumpInfo-session').hide();
 		hide("accessoryType","select");
-		// notRequire(["accessoryType"],"id");
 		clearTabRow("pumpBody");
 		clearTabRow("accessoryBody");
 		clearTabRow("sparePartBody");
+		$('#pumpTotal')[0].value = 0;
+		$('#accessoryTotal')[0].value = 0;
+		$('#sparePartTotal')[0].value = 0;	
 	}
 
 }
@@ -310,9 +303,6 @@ function showDetail(thisVal){
 			require([i.id],"id");
 		}
 		require(["pumpType"],"id");
-		// require(["series","shaftSpeed","size"],"id");
-		// require(["pumpType","applicationType","specificGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
-		// require(["casingMoc","shaftSealing","impellerMoc","sealingGlandFlushing","lubrication","flangeDrilling"],"id");
 	} else if(thisVal.value == 'yes') {
 		// Route 1 No API
 		$('.basic-session').show();
@@ -331,8 +321,6 @@ function showDetail(thisVal){
 		for(let i of $("#detailSession :input")){
 			notRequire([i.id],"id");
 		}
-		// notRequire(["applicationType","specificGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
-		// require(["pumpType","series","shaftSpeed","size","casingMoc","shaftSealing","impellerMoc","sealingGlandFlushing","lubrication","flangeDrilling"],"id");
 	}
 }
 function showDetailElse(){
@@ -348,91 +336,6 @@ function showDetailElse(){
 	for(let i of $("#detailSession :input")){
 		notRequire([i.id],"id");
 	}
-	// notRequire(["series","shaftSpeed","size"],"id");
-	// notRequire(["pumpType","applicationType","specificGravity","flowRate","flowRateUnit","head","headUnit","temperature","temperatureUnit","shaftSpeed_API","shaftSpeedUnit","shr","shrUnit"],"id");
-	// notRequire(["casingMoc","shaftSealing","impellerMoc","sealingGlandFlushing","lubrication","flangeDrilling"],"id");
 }
 
 // Hide and Show - end
-// //Currency Format - start
-// function currencyFormat(){
-// $("input[data-type='currency']").on({
-// 	keyup: function () {
-// 		formatCurrency($(this));
-// 	},
-// 	blur: function () {
-// 		formatCurrency($(this), "blur");
-// 	}
-// });
-// }
-// currencyFormat();
-// function formatNumber(n) {
-// 	// format number 1000000 to 1,234,567
-// 	return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-// }
-// function formatCurrency(input, blur) {
-// 	// appends $ to value, validates decimal side
-// 	// and puts cursor back in right position.
-
-// 	// get input value
-// 	var input_val = input.val();
-
-// 	// don't validate empty input
-// 	if (input_val === "") {
-// 		return;
-// 	}
-
-// 	// original length
-// 	var original_len = input_val.length;
-
-// 	// initial caret position 
-// 	var caret_pos = input.prop("selectionStart");
-
-// 	// check for decimal
-// 	if (input_val.indexOf(".") >= 0) {
-
-// 		// get position of first decimal
-// 		// this prevents multiple decimals from
-// 		// being entered
-// 		var decimal_pos = input_val.indexOf(".");
-
-// 		// split number by decimal point
-// 		var left_side = input_val.substring(0, decimal_pos);
-// 		var right_side = input_val.substring(decimal_pos);
-
-// 		// add commas to left side of number
-// 		left_side = formatNumber(left_side);
-
-// 		// validate right side
-// 		right_side = formatNumber(right_side);
-
-// 		// On blur make sure 2 numbers after decimal
-// 		if (blur === "blur") {
-// 			right_side += "00";
-// 		}
-
-// 		// Limit decimal to only 2 digits
-// 		right_side = right_side.substring(0, 2);
-
-// 		// join number by .
-// 		input_val = left_side + "." + right_side;
-
-// 	} else {
-// 		input_val = formatNumber(input_val);
-// 		input_val = input_val;
-
-// 		// final formatting
-// 		if (blur === "blur") {
-// 			input_val += ".00";
-// 		}
-// 	}
-
-// 	// send updated string to input
-// 	input.val(input_val);
-
-// 	// put caret back in the right position
-// 	var updated_len = input_val.length;
-// 	caret_pos = updated_len - original_len + caret_pos;
-// 	input[0].setSelectionRange(caret_pos, caret_pos);
-// }
-// //Currency Format - end

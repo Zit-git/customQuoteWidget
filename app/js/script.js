@@ -282,7 +282,7 @@ function submitFun(thisVal){
 	// if(!$("#SAD_Yes")[0].checked && !$("#SAD_No")[0].checked){
 	// 	return false;
 	// }
-	alert("test");
+	// alert("test");
 	console.log(subCustomData);
 	let subDataList = [];
 	[pumpLis,accessoryLis,sparePartLis].forEach(subEach => {
@@ -298,7 +298,7 @@ function submitFun(thisVal){
 		});
 	});
 	let quoteData = {
-		id: "156506000001738053",
+		// id: "156506000001738053",
 		Subject:subject.value,
 		Account_Name:customerName.value,
 		Deal_Name:enquiryName.value,
@@ -314,20 +314,31 @@ function submitFun(thisVal){
 		Discount:discountPercentage.value+"%",
 		Product_Details:subDataList
 	};
-// ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData,Trigger:[]}).then(function(data){
-// 	console.log(data);
-// 	});
+ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData}).then(function(data){
+	let respData = data.data;
+	if(respData){
+		swal(respData[0].code,respData[0].message,"success");
+	}
+	else{
+		swal("Failed","Unkown error","error");
+	}
+	});
 	// var config={
 	// 	Entity:"Quotes",
-	// 	APIData:quoteData,
-	// 	Trigger:[]
+	// 	APIData:quoteData
 	//   }
-	// //   console.log(config);
+	//   console.log(config);
 	//   ZOHO.CRM.API.updateRecord(config)
 	//   .then(function(data){
-	// 	  console.log(data);
+	// 	  let respData = data.data;
+	// 	 if(respData){
+	// 		 swal(respData.code,respData.message,respData.status);
+	// 	 }
+	// 	 else{
+	// 		 swal("Failed","Unkown error","error");
+	// 	 }
 	//   });
-	// console.log(subDataList);
+	console.log(subDataList);
 	return false;
 }
 document.getElementById("quoteForm").onsubmit = function(){return submitFun();}
