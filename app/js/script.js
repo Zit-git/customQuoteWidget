@@ -1,5 +1,6 @@
 //Fields and Global Varibales
 var currDate = new Date();
+var currentUser;
 var productsDataLis = [];
 var productsRelations = {};
 var apiTableData;
@@ -105,7 +106,7 @@ async function addRow(thisVal,tabBody){
 					let effVal = apiSelectedData.EFFICIENCY+"%";
 					let motorRatVal = apiSelectedData.MOTOR_RATING_KW || "";
 					let shaftPwr = apiSelectedData.SHAFT_POWER || "";
-					apiSpecs = "Flow rate: "+flowRate.value+",  Head: "+head.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+$("#liquidName")[0].value+",  ";
+					apiSpecs = "\nFlow rate: "+flowRate.value+",  Head: "+head.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+$("#liquidName")[0].value+",  ";
 					selectData.apiTableData = apiSelectedData;
 				}
 			});
@@ -183,6 +184,7 @@ async function addRow(thisVal,tabBody){
 		else if(routeMethod){
 			swal("Empty Value","Select all the fields marked mandatory","error");
 		}
+		return rowVal;
 }
 // Add row button code - end
 document.getElementById("searchBtn").onclick = event => {
@@ -273,6 +275,7 @@ var seriesOnChange = async seriesVal => {
 	}
 }
 function submitFun(thisVal){
+	let quoteStageVal = $("#SAD_No")[0].checked ? "Confirmed" : "Draft";
 	// var fields = document.getElementsByClassName("important");
 	// for(let i of fields){
 	// 	if(i.value == ""){
@@ -298,12 +301,13 @@ function submitFun(thisVal){
 		});
 	});
 	let quoteData = {
-		// id: "156506000001738053",
+		id: $('#quoteSelect').val(),
 		Subject:subject.value,
 		Account_Name:customerName.value,
+		Contact_ID:contactName.value,
 		Deal_Name:enquiryName.value,
 		Product_Type:productType.value,
-		Quote_Stage:quoteStage.value,
+		Quote_Stage:quoteStageVal,
 		Quote_Date:quoteDate.value,
 		Customer_Plant:$("#customerPlant")[0].value,
 		Cust_Equiment_Number:$("#custEquipmentNumber")[0].value,
@@ -314,37 +318,101 @@ function submitFun(thisVal){
 		Discount:discountPercentage.value+"%",
 		Product_Details:subDataList
 	};
-ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData}).then(function(data){
-	let respData = data.data;
-	if(respData){
-		swal(respData[0].code,respData[0].message,"success");
+	quoteData = mapFilter(quoteData);
+	console.log(quoteData);
+	currentUser = currentUser || [];
+	let redirectUrl = currentUser.length > 0 ? "https://crm.zoho.in/crm/org60005855369/tab/Quotes/" : "https://crm.zoho.in/portal/FlowMart/crm/tab/Quotes/";
+	if(!quoteData.id){
+		ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData}).then(function(data){
+			let respData = data.data;
+			if(respData){
+				swal(respData[0].code,respData[0].message,"success");
+				window.open(redirectUrl+respData[0].details.id);
+				location.reload();
+			}
+			else{
+				swal("Failed","Unkown error","error");
+			}
+			},function(err){
+				console.log(err);
+				swal(err.data[0].code,JSON.stringify(err.data[0].details),"error");
+			});
 	}
 	else{
-		swal("Failed","Unkown error","error");
+		var config={
+			Entity:"Quotes",
+			APIData:quoteData
+		  }
+		  console.log(config);
+		  ZOHO.CRM.API.updateRecord(config)
+		  .then(function(data){
+			  let respData = data.data;
+			 if(respData){
+				swal(respData[0].code,respData[0].message,"success");
+				window.open(redirectUrl+respData[0].details.id);
+				location.reload();
+			 }
+			 else{
+				 swal("Failed","Unkown error","error");
+			 }
+		  },function(err){
+			console.log(err);
+			swal(err.data[0].code,JSON.stringify(err.data[0].details),"error");
+		});
 	}
-	});
-	// var config={
-	// 	Entity:"Quotes",
-	// 	APIData:quoteData
-	//   }
-	//   console.log(config);
-	//   ZOHO.CRM.API.updateRecord(config)
-	//   .then(function(data){
-	// 	  let respData = data.data;
-	// 	 if(respData){
-	// 		 swal(respData.code,respData.message,respData.status);
-	// 	 }
-	// 	 else{
-	// 		 swal("Failed","Unkown error","error");
-	// 	 }
-	//   });
-	console.log(subDataList);
+	console.log(subCustomData);
 	return false;
 }
 document.getElementById("quoteForm").onsubmit = function(){return submitFun();}
+var editMode = async quoteId =>{
+	// quoteId = "156506000001896002";
+	if(quoteId){
+		$("#titleTxt")[0].innerHTML = "Edit Quote";
+	getQuote = await getSingleRecord("Quotes",quoteId);
+	$("#subject")[0].value = getQuote.Subject;
+	$("#customerPlant")[0].value = getQuote.Customer_Plant;
+	$("#quoteDate")[0].value = getQuote.Quote_Date;
+	$("#custEquipmentNumber")[0].value = getQuote.Cust_Equiment_Number;
+	$("#custEquipmentName")[0].value = getQuote.Cust_Equiment_Name;
+	$("#liquidName")[0].value = getQuote.Liquid_Name;
+	$("#contactName").val((getQuote.Contact_Name || {}).id).change();
+	$("#enquiryName").val((getQuote.Deal_Name || {}).id).change();
+	$("#productType").val(getQuote.Product_Type).change();
+	$("#brand").val(getQuote.Brand).change();
+	$("#quoteStage").val(getQuote.Quote_Stage).change();
+	clearTabRow("pumpBody");
+	clearTabRow("accessoryBody");
+	clearTabRow("sparePartBody");
+	getQuote.Product_Details.forEach(async val => {
+		let getProduct = await getSingleRecord("Products",val.product.id);
+		let tabBody,fieldKey;
+		if(getProduct.Product_Category == "Pump"){
+			tabBody = "pumpBody";
+			fieldKey = "pump_";
+		}else if(getProduct.Product_Category == "Accessory"){
+			tabBody = "accessoryBody";
+			fieldKey = "accessory_";
+		}else if(getProduct.Product_Category == "Spare Part"){
+			tabBody = "sparePartBody";
+			fieldKey = "sparePart_";
+		}
+		let firstLtr = tabBody.substring(0,1)+"_"; // p or a or s
+		let index = await addRow(this,tabBody);
+		$("#"+fieldKey+index).val(getProduct.id).change();
+		$("#"+firstLtr+"quantity_"+index)[0].value = val.quantity;
+	});
+	console.log(getQuote);
+}
+else{
+	location.reload();
+}
+} 
+  $('#quoteSelect').change((thisVal) => editMode(thisVal.target.value));
 	// Subscribe to the EmbeddedApp onPageLoad event before initializing the widget
 ZOHO.embeddedApp.on("PageLoad",function(etData){
 	asyncFun = async () =>{
+		currentUser = (await ZOHO.CRM.CONFIG.getCurrentUser()).users;
+		console.log(currentUser);
 	// Load optionis
 		var quotesFields = await getFields("Quotes");
 		var mapData = {Brand:brand,Accessory_Type:accessoryType,Quote_Stage:quoteStage,Flow_Rate_Unit:flowRateUnit,Head_Unit:headUnit,Temperature_Unit:temperatureUnit,Shaft_Speed:shaftSpeed_API,Shaft_Speed_Unit:shaftSpeedUnit,Solid_Handling_Requirement_Unit:shrUnit};
@@ -356,6 +424,23 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 					}}).join("");
 			}
 		}
+	var crmContacts = await getRecords("Contacts");
+	contactName.innerHTML =emptyOpt+crmContacts.map(data => {
+		return '<option value="'+data.id+'">'+data.Full_Name+'</option>';
+	}).join("");
+	contactName.onchange = event => {
+		crmContacts.forEach(data => {
+			if(data.id == contactName.value){
+				let accountData = data.Account_Name || {};
+				let accId = accountData.id || "-None-";
+				let accName = accountData.name || "-None-";
+				customerName.innerHTML = '<option value="'+accId+'" selected>'+accName+'</option>';
+				discountPercentage.value = data.Discount || 0;
+			}
+		});
+	}
+	var crmDeals = await getRecords("Deals");
+	enquiryName.innerHTML =emptyOpt+crmDeals.map(data => '<option value="'+data.id+'">'+data.Deal_Name+'</option>').join("");
 	productsDataLis = await getRecords("Products");
 	for (product of productsDataLis){
 		let pumpId = (product.Pump || {}).id;
@@ -384,23 +469,12 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		}
 	}
 	}
-	var crmContacts = await getRecords("Contacts");
-	contactName.innerHTML =emptyOpt+crmContacts.map(data => {
-		return '<option value="'+data.id+'">'+data.Full_Name+'</option>';
-	}).join("");
-	contactName.onchange = event => {
-		crmContacts.forEach(data => {
-			if(data.id == contactName.value){
-				let accountData = data.Account_Name || {};
-				let accId = accountData.id || "-None-";
-				let accName = accountData.name || "-None-";
-				customerName.innerHTML = '<option value="'+accId+'" selected>'+accName+'</option>';
-				discountPercentage.value = data.Discount || 0;
+	var getAllQuotes = await getRecords("Quotes");
+		$("#quoteSelect")[0].innerHTML ='<option value="">Edit Existing Quote</option>'+getAllQuotes.map(data => {
+			if(data.Quote_Stage == "Draft"){
+			return '<option value="'+data.id+'">'+data.Subject+'</option>';
 			}
-		});
-	}
-	var crmDeals = await getRecords("Deals");
-	enquiryName.innerHTML =emptyOpt+crmDeals.map(data => '<option value="'+data.id+'">'+data.Deal_Name+'</option>').join("");
+		}).join("");
 	crmPumpTypes = await getRecords("Pump_Types");
 	crmSeries = await getRecords("Series");
 	crmSizes = await getRecords("Sizes");

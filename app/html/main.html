@@ -21,9 +21,13 @@
       <form id="quoteForm">
          <nav class="navbar navbar-expand-sm  bg-white navbar-white fixed-top mb-5  border-bottom " >
             <h4 class="w-50" id="titleTxt">Create Quote</h4>
+            <div class="w-50">
+            <select class="custom-select" id="quoteSelect">
+             </select>
+            </div>
             <ul class="navbar-nav justify-content-end w-50">
               <li class="nav-item">
-               <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn">Cancel</button>
+               <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn" onclick="location.reload();">Cancel</button>
               </li>
               <li class="nav-item">
                 <button type="submit" class="btn btn-primary saveBtn" id="submitBtn">Save</button>

@@ -11,6 +11,15 @@ var hide = (id,fieldType) => {
 var show = (id,fieldType) => {
     $('label[for='+id+'], '+fieldType+'#'+id).show();
 }
+var mapFilter = obj => {
+	let filteredMap = {};
+  Object.keys(obj).forEach(key =>{
+	  if(obj[key] && obj[key] != "-None-"){
+		  filteredMap[key] = obj[key];
+	  }
+  });
+  return filteredMap;
+}
 // Prevent char like e,+,- in number field
 var preventNum = fieldList =>{
 	for(let numField of fieldList){
@@ -79,8 +88,10 @@ async function fetchPrice(event,thisVal) {
 	let crmProductSingle = await getSingleRecord("Products",productId);
 	console.log(crmProductSingle);
 	let firstLtr = thisVal.name.substring(0,1); // p or a or s
+	let descriptionVal = crmProductSingle.Description || "";
 	if(firstLtr == "p"){ //pump
-		let finalTxt = "Datasheet ref nr: "+ crmProductSingle.TDS_Ref + " ( For operating limits and warranty conditions check the datasheet )";
+		let finalTxt = "\nDatasheet ref nr: "+ crmProductSingle.TDS_Ref + " ( For operating limits and warranty conditions check the datasheet )";
+		descriptionVal+= apiSpecs+finalTxt;
 		let cusTempMap = {Product_Id:crmProductSingle.id,Specification:apiSpecs +finalTxt,Select_Data:selectData};
 		subCustomData.push(cusTempMap);
 	}
@@ -91,7 +102,7 @@ async function fetchPrice(event,thisVal) {
 	let amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
 	let quantityVal = quantity.value || 0;
 	let unitPriceVal = crmProductSingle.Unit_Price;
-	let descriptionVal = crmProductSingle.Description || "";
+	
 	description.value = descriptionVal;
 	unitPrice.value = unitPriceVal;
 	amount.value = quantityVal * unitPriceVal;
