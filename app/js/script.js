@@ -197,7 +197,7 @@ document.getElementById("searchBtn").onclick = event => {
 	if(mandatoryCheck){
 		$('#loadingDiv').show();
 		$('#searchBtn').hide();
-		var fetchUrl = new URL("http://test.makemypump.com:8288//api/Curve/GetCurveTest");
+		var fetchUrl = new URL("https://test.makemypump.com:8291//api/Curve/GetCurveTest");
 		let pumpTypeAPI;
 		crmPumpTypes.forEach(val => {
 			if(val.id == pumpType.value){
@@ -205,12 +205,16 @@ document.getElementById("searchBtn").onclick = event => {
 			}
 		});
 		let applicationTypeAPI = crmAppTypeSingle.Name;
-		var params = {fld1:pumpTypeAPI,fld2:applicationTypeAPI,fld3:flowRate.value,fld4:"m3/hr",fld5:head.value,fld6:"m",fld7:temperature.value,fld8:"",fld9:specificGravity.value,fld10:shaftSpeed_API.value};
+		let flowRateVal = formula("Flow",flowRateUnit.value,flowRate.value);
+		let headVal = formula("Head",headUnit.value,head.value,specificGravity.value);
+		let temperatureVal = formula("Temperature",temperatureUnit.value,temperature.value);
+		var params = {fld1:pumpTypeAPI,fld2:applicationTypeAPI,fld3:flowRateVal,fld4:"m3/hr",fld5:headVal,fld6:"m",fld7:temperatureVal,fld8:"d",fld9:specificGravity.value,fld10:shaftSpeed_API.value};
 		Object.keys(params).forEach(key => fetchUrl.searchParams.append(key, params[key]));
 		console.log(fetchUrl);
 		fetch(fetchUrl)
 		.then(resp => resp.json(), err => {
 			swal("Unkown Error",err.toString(),"warning");
+			console.log(err);
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
 		})
@@ -256,7 +260,7 @@ function checkApiRow(thisVal){
 	}
 	seriesVal = document.getElementById("SERIES_"+rowIndex).value;
 	crmSeries.forEach(val => {
-		if(val.Name == seriesVal){
+		if(val.Name.toUpperCase() == seriesVal.toUpperCase()){
 			seriesOnChange(val.id);
 		}
 	});
@@ -300,6 +304,10 @@ function submitFun(thisVal){
 			}
 		});
 	});
+	if(subDataList.length == 0){
+		swal("No Products Available","Add any products to the quatation","error");
+		return false;
+	}
 	let quoteData = {
 		id: $('#quoteSelect').val(),
 		Subject:subject.value,

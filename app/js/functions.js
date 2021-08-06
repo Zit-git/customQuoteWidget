@@ -166,6 +166,28 @@ var notRequire = (values,by) => {
 		}
 }
 }
+var formula = (name,unit,value,specificGrav) => {
+	unit = unit.toLowerCase();
+	value = Number(value);
+	specificGrav = Number(specificGrav);
+	let flowFactor = {"m3/hr":1,"lpm":0.06,"lph":0.001,"lps":3.6,"gpm (us)":0.2271};
+	let headFactor = {"mlc":1,"flc":0.3048,"bar (g)":10.197,"kg/cm2":10.197};
+	let temperatureFactor = {"deg c":1,"deg f":5/9};
+	let factorMap = {Flow:flowFactor,Head:headFactor,Temperature:temperatureFactor};
+	let convFactor = factorMap[name][unit];
+	let convVal,finalVal;
+	if(unit == "bar (g)" || unit == "kg/cm2"){
+		convVal = value * convFactor;
+		finalVal = convVal / specificGrav;
+	}else if(unit == "deg f"){
+		convVal = value - 32;
+		finalVal = convVal * convFactor;
+	}else{
+		finalVal = value * convFactor;
+	}
+	return roundToTwo(finalVal);
+}
+console.log(formula("Flow","gpm (us)",111));
 var getRecords = async entity =>{
 	let responseData = [], pageVal = 1;
 	do {
