@@ -13,19 +13,17 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
       <!-- <script src="../js/jquery.min.js"></script> -->
       <!-- <script src="../js/popper.min.js"></script> -->
-      <!-- <script src="../js/bootstrap.min.js"></script> -->
+      <script src="../js/bootstrap.min.js"></script>
       <!-- <script src="../js/bootstrap-datepicker.js"></script> -->
       <script src="../js/lib/ZohoEmbededAppSDK.min.js"></script>
    </head>
    <body>
       <form id="quoteForm">
          <nav class="navbar navbar-expand-sm  bg-white navbar-white fixed-top mb-5  border-bottom " >
-            <h4 class="w-50" id="titleTxt">Create Quote</h4>
-            <div class="w-50">
-            <select class="custom-select" id="quoteSelect">
-             </select>
-            </div>
-            <ul class="navbar-nav justify-content-end w-50">
+            <h4 style="width:240px" id="titleTxt">Create Quote</h4>
+			<a class="w-25 " data-toggle="modal" href="#myModal" style="cursor:pointer">Edit Existing Quote</a>
+            
+            <ul class="navbar-nav justify-content-end w-75">
               <li class="nav-item">
                <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn" onclick="location.reload();">Cancel</button>
               </li>
@@ -743,6 +741,50 @@
       </div>
    </form>
    </body>
+   <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Select Any Quote</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+           <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Subject</th>
+          <th>Quote Stage</th>
+          <th>Deal Name</th>
+          <th>Grand Total</th>
+        </tr>
+      </thead>
+      <tbody id="quoteBody">
+         <tr>
+            <td colspan="6">
+               <div id="loadingDiv" align="center";>
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+            </td>
+         </tr>
+      </tbody>
+    </table>
+  </div>
+        </div>
+        
+       
+        
+      </div>
+    </div>
+  </div>
    <script src="../js/functions.js"></script>
    <script src="../js/script.js"></script>
 </html>

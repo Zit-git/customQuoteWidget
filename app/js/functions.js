@@ -187,7 +187,6 @@ var formula = (name,unit,value,specificGrav) => {
 	}
 	return roundToTwo(finalVal);
 }
-console.log(formula("Flow","gpm (us)",111));
 var getRecords = async entity =>{
 	let responseData = [], pageVal = 1;
 	do {

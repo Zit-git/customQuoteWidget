@@ -1,6 +1,7 @@
 //Fields and Global Varibales
 var currDate = new Date();
 var currentUser;
+var selectedQuote;
 var productsDataLis = [];
 var productsRelations = {};
 var apiTableData;
@@ -309,7 +310,7 @@ function submitFun(thisVal){
 		return false;
 	}
 	let quoteData = {
-		id: $('#quoteSelect').val(),
+		id: selectedQuote,
 		Subject:subject.value,
 		Account_Name:customerName.value,
 		Contact_ID:contactName.value,
@@ -374,6 +375,7 @@ function submitFun(thisVal){
 document.getElementById("quoteForm").onsubmit = function(){return submitFun();}
 var editMode = async quoteId =>{
 	// quoteId = "156506000001896002";
+	selectedQuote = quoteId;
 	if(quoteId){
 		$("#titleTxt")[0].innerHTML = "Edit Quote";
 	getQuote = await getSingleRecord("Quotes",quoteId);
@@ -414,8 +416,7 @@ var editMode = async quoteId =>{
 else{
 	location.reload();
 }
-} 
-  $('#quoteSelect').change((thisVal) => editMode(thisVal.target.value));
+}
 	// Subscribe to the EmbeddedApp onPageLoad event before initializing the widget
 ZOHO.embeddedApp.on("PageLoad",function(etData){
 	asyncFun = async () =>{
@@ -428,7 +429,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 			if(mapData[field.api_name]){
 				mapData[field.api_name].innerHTML = field.pick_list_values.map(data => {
 					if(data.actual_value != "-None-"){
-					return '<option value="'+data.actual_value+'">'+data.display_value+'</option>';
+					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
 					}}).join("");
 			}
 		}
@@ -478,9 +479,13 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	}
 	}
 	var getAllQuotes = await getRecords("Quotes");
-		$("#quoteSelect")[0].innerHTML ='<option value="">Edit Existing Quote</option>'+getAllQuotes.map(data => {
+		$("#quoteBody")[0].innerHTML =getAllQuotes.map(data => {
 			if(data.Quote_Stage == "Draft"){
-			return '<option value="'+data.id+'">'+data.Subject+'</option>';
+				console.log(data.id);
+				let tabRow = '<tr>';
+				tabRow += '<td><i class="fa fa-pen btn" data-dismiss="modal" id='+data.id+' onclick="editMode(this.id)"></i></td><td>'+data.Quote_Date+'</td><td>'+data.Subject+'</td><td>'+data.Quote_Stage+'</td><td>'+((data.Deal_Name || {}).name || "")+'</td><td> ₹ '+data.Grand_Total+'</td>';
+				tabRow += '</tr>';
+				return tabRow;
 			}
 		}).join("");
 	crmPumpTypes = await getRecords("Pump_Types");
