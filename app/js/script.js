@@ -107,7 +107,7 @@ async function addRow(thisVal,tabBody){
 					let effVal = apiSelectedData.EFFICIENCY+"%";
 					let motorRatVal = apiSelectedData.MOTOR_RATING_KW || "";
 					let shaftPwr = apiSelectedData.SHAFT_POWER || "";
-					apiSpecs = "\nFlow rate: "+flowRate.value+",  Head: "+head.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+$("#liquidName")[0].value+",  ";
+					apiSpecs = "\nFlow rate: "+flowRate.value+" "+flowRateUnit.value+",  Head: "+head.value+" "+headUnit.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+$("#liquidName")[0].value+",  ";
 					selectData.apiTableData = apiSelectedData;
 				}
 			});
@@ -232,7 +232,7 @@ document.getElementById("searchBtn").onclick = event => {
 						if(visCln.includes(obj)){
 							display = "true";
 						}
-						tabRow += '<td style="display: '+display+';"><input type="text" name="'+obj+'" value="'+objVal+'" id="'+obj+'_'+index+'" index="'+index+'" class="form-control"></td>';
+						tabRow += '<td style="display: '+display+';"><input type="text" name="'+obj+'" value="'+objVal+'" id="'+obj+'_'+index+'" index="'+index+'" class="form-control" disabled></td>';
 					}
 					tabRow += '<td><input type="checkbox" class="btn-check" name="checkBtn" id="checkBtn_'+index+'" index="'+index+'" onClick="checkApiRow(this)"></td>';
 					tabRow += '</tr>';
@@ -268,6 +268,9 @@ function checkApiRow(thisVal){
 }
 var seriesOnChange = async seriesVal => {
 	if(seriesVal){
+		impellerMoc.innerHTML = emptyOpt;
+		sealingGlandFlushing.innerHTML = emptyOpt;
+		size.innerHTML = emptyOpt;
 		var shaftSpeedLis = [];
 		crmSizes.forEach(val => shaftSpeedLis = shaftSpeedLis.concat(val.Shaft_Speed));
 		shaftSpeedLis = [...new Set(shaftSpeedLis)];
@@ -410,6 +413,9 @@ var editMode = async quoteId =>{
 		let index = await addRow(this,tabBody);
 		$("#"+fieldKey+index).val(getProduct.id).change();
 		$("#"+firstLtr+"quantity_"+index)[0].value = val.quantity;
+		setTimeout(() => {
+			$("#"+firstLtr+"description_"+index)[0].value = val.product_description;
+		}, 1000);		
 	});
 	console.log(getQuote);
 }
@@ -428,7 +434,9 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		for(let field of quotesFields){
 			if(mapData[field.api_name]){
 				mapData[field.api_name].innerHTML = field.pick_list_values.map(data => {
-					if(data.actual_value != "-None-"){
+					if(field.api_name == "Accessory_Type"){
+					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
+					}else if(data.actual_value != "-None-"){
 					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
 					}}).join("");
 			}
@@ -469,10 +477,10 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		var eleAndCat = {Pump:pumpLis,Accessory:accessoryLis,Spare_Part:sparePartLis};
 		for(key in eleAndCat){
 		if(product.Product_Category == key.replace("_"," ")){
-			let opt = document.createElement("option");
-			opt.text = product.Product_Name +"-"+ product.Product_Code;
-			opt.value = product.id;
 			for(let value of eleAndCat[key]){
+				let opt = document.createElement("option");
+				opt.text = product.Product_Name +"-"+ product.Product_Code;
+				opt.value = product.id;
 					value.add(opt);
 			}
 		}

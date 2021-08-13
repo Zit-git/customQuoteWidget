@@ -32,11 +32,14 @@ var preventNum = fieldList =>{
 	}
 	}
 	preventNum($('input[type=number]'));
+//ReplaceAll function
+var replaceAll = (text,search,replaceWith) => text.split(search).join(replaceWith);	
 //Add Row Function - start
 var appendTabRow = (tabBody,rowIndex) =>{
 	var subTabBody = document.getElementById(tabBody);
 	var firstcloneRow = subTabBody.firstElementChild.cloneNode(true);
-	var rowText = firstcloneRow.innerHTML.replaceAll("###",rowIndex);
+	// var rowText = firstcloneRow.innerHTML.replaceAll("###",rowIndex);
+	var rowText = replaceAll(firstcloneRow.innerHTML,"###",rowIndex);
 	var firstRow = document.createElement("tr");
 	firstRow.innerHTML = rowText;
 	firstRow.style = "display: true;";

@@ -21,7 +21,7 @@
       <form id="quoteForm">
          <nav class="navbar navbar-expand-sm  bg-white navbar-white fixed-top mb-5  border-bottom " >
             <h4 style="width:240px" id="titleTxt">Create Quote</h4>
-			<a class="w-25 " data-toggle="modal" href="#myModal" style="cursor:pointer">Edit Existing Quote</a>
+			<a class="w-25 " data-toggle="modal" href="#myModal" style="cursor:pointer">Edit Draft Quotes</a>
             
             <ul class="navbar-nav justify-content-end w-75">
               <li class="nav-item">
@@ -517,7 +517,7 @@
                                  <select class="form-control w-100" name="pump" id="pump_###" index="###" onchange="fetchPrice(event,this)">
                                     <option value="">-None-</option>
                                  </select>
-                                 <textarea class="form-control" rows="5" name="p_description" id="p_description_###" index="###" placeholder="Description"></textarea>
+                                 <textarea class="form-control" rows="5" name="p_description" id="p_description_###" index="###" placeholder="Description" disabled></textarea>
                               </td>
                               <td><input type="number" class="form-control" name="p_quantity" id="p_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
                               <td><input type="text" class="form-control symbol-unit" name="p_unitPrice" id="p_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
@@ -551,8 +551,12 @@
          <div class="accessory-session">
             <div class="container-fluid">
                <div class="row pb-3">
-                  <div class="col-12">
-                     <h4>Accessory</h4>
+                  <div class="col-12" style="display: inherit;">
+                     <h4 style="width: auto;">Accessory</h4>
+                     <!-- <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
+                        <input type="checkbox" class="custom-control-input" id="accessoryBodyFilter">
+                        <label class="custom-control-label" for="accessoryBodyFilter">Filter based on pump</label>
+                      </div> -->
                   </div>
                   <div class="col-12">
                      <div class="table-responsive">
@@ -572,7 +576,7 @@
                                     <select class="form-control w-100" name="accessory" id="accessory_###" index="###" onchange="fetchPrice(event,this)">
                                        <option value="">-None-</option>
                                     </select>
-                                    <textarea class='form-control' rows='5' name="a_description" id='a_description_###' index="###" placeholder="Description"></textarea>
+                                    <textarea class='form-control' rows='5' name="a_description" id='a_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
                                  <td><input type="number" class="form-control" name="a_quantity" id="a_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
                                  <td><input type="text" class="form-control symbol-unit" name="a_unitPrice" id="a_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
@@ -603,8 +607,12 @@
          <div class="spare-session">
             <div class="container-fluid">
                <div class="row pb-3">
-                  <div class="col-12">
-                     <h4>Spare Part</h4>
+                  <div class="col-12" style="display: inherit;">
+                     <h4 style="display: inherit;">Spare Part</h4>
+                     <!-- <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
+                        <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter">
+                        <label class="custom-control-label" for="sparePartBodyFilter">Filter based on pump</label>
+                      </div> -->
                   </div>
                   <div class="col-12">
                      <div class="table-responsive">
@@ -624,7 +632,7 @@
                                     <select class="form-control w-100" name="sparePart" id="sparePart_###" index="###" onchange="fetchPrice(event,this)">
                                        <option value="">-None-</option>
                                     </select>
-                                    <textarea class='form-control' rows='5' name="s_description" id='s_description_###' index="###" placeholder="Description"></textarea>
+                                    <textarea class='form-control' rows='5' name="s_description" id='s_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
                                  <td><input type="number" class="form-control" name="s_quantity" id="s_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
                                  <td><input type="text" class="form-control symbol-unit" name="s_unitPrice" id="s_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
