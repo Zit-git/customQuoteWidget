@@ -104,10 +104,10 @@ async function addRow(thisVal,tabBody){
 					serSeries = document.getElementById("SERIES_"+rowIndex).value;
 					serSize = document.getElementById("SIZE_"+rowIndex).value;
 					serSpeed = document.getElementById("SPEED_"+rowIndex).value;
-					let effVal = apiSelectedData.EFFICIENCY+"%";
-					let motorRatVal = apiSelectedData.MOTOR_RATING_KW || "";
-					let shaftPwr = apiSelectedData.SHAFT_POWER || "";
-					apiSpecs = "\nFlow rate: "+flowRate.value+" "+flowRateUnit.value+",  Head: "+head.value+" "+headUnit.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+$("#liquidName")[0].value+",  ";
+					let effVal = (apiSelectedData.EFFICIENCY || "NA")+"%";
+					let motorRatVal = apiSelectedData.MOTOR_RATING_KW || "NA";
+					let shaftPwr = apiSelectedData.SHAFT_POWER || "NA";
+					apiSpecs = "\nFlow rate: "+flowRate.value+" "+flowRateUnit.value+",  Head: "+head.value+" "+headUnit.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW / bhp: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+($("#liquidName")[0].value || "NA")+",  ";
 					selectData.apiTableData = apiSelectedData;
 				}
 			});
@@ -453,6 +453,14 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				let accName = accountData.name || "-None-";
 				customerName.innerHTML = '<option value="'+accId+'" selected>'+accName+'</option>';
 				discountPercentage.value = data.Discount || 0;
+				if(discountPercentage.value > 0){
+					$('.discountPrct').show();
+					$('.discount').show();
+				}
+				else{
+					$('.discountPrct').hide();
+					$('.discount').hide();
+				}
 			}
 		});
 	}

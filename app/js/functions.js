@@ -93,7 +93,7 @@ async function fetchPrice(event,thisVal) {
 	let firstLtr = thisVal.name.substring(0,1); // p or a or s
 	let descriptionVal = crmProductSingle.Description || "";
 	if(firstLtr == "p"){ //pump
-		let finalTxt = "\nDatasheet ref nr: "+ crmProductSingle.TDS_Ref + " ( For operating limits and warranty conditions check the datasheet )";
+		let finalTxt = "\nDatasheet ref nr: "+ (crmProductSingle.TDS_Ref || "NA") + " (For operating limits and warranty conditions check the datasheet)";
 		descriptionVal+= apiSpecs+finalTxt;
 		let cusTempMap = {Product_Id:crmProductSingle.id,Specification:apiSpecs +finalTxt,Select_Data:selectData};
 		subCustomData.push(cusTempMap);
@@ -191,12 +191,14 @@ var formula = (name,unit,value,specificGrav) => {
 	return roundToTwo(finalVal);
 }
 var getRecords = async entity =>{
-	let responseData = [], pageVal = 1;
+	let responseData = [], pageVal = 1, boolVal=false;
 	do {
 		let response = await ZOHO.CRM.API.getAllRecords({Entity:entity,page:pageVal,per_page:200});
+		if(response.data){
 		responseData = [...responseData,...response.data];
 		pageVal++;
-		var boolVal = response.info.more_records;
+		boolVal = response.info.more_records;
+		}
 	}
 	while (boolVal);
 	return responseData;
@@ -241,8 +243,8 @@ function typeChange(){
 		$('.accessoryTotal').show();
 		$('.spareTotal').show();
 		$('.subTotal').show();
-		$('.discountPrct').show();
-		$('.discount').show();
+		// $('.discountPrct').show();
+		// $('.discount').show();
 		$('.fTotal').show();
 		hide("accessoryType","select");
 		clearTabRow("pumpBody");
@@ -260,8 +262,8 @@ function typeChange(){
 		$('.accessoryTotal').show();
 		$('.spareTotal').hide();
 		$('.subTotal').show();
-		$('.discountPrct').show();
-		$('.discount').show();
+		// $('.discountPrct').show();
+		// $('.discount').show();
 		$('.fTotal').show();
 		$('.basic-session').hide();
 		$('.detail-session').hide();
@@ -281,8 +283,8 @@ function typeChange(){
 		$('.accessoryTotal').hide();
 		$('.spareTotal').show();
 		$('.subTotal').show();
-		$('.discountPrct').show();
-		$('.discount').show();
+		// $('.discountPrct').show();
+		// $('.discount').show();
 		$('.fTotal').show();
 		$('.basic-session').hide();
 		$('.detail-session').hide();
@@ -302,8 +304,8 @@ function typeChange(){
 		$('.accessoryTotal').hide();
 		$('.spareTotal').hide();
 		$('.subTotal').hide();
-		$('.discountPrct').hide();
-		$('.discount').hide();
+		// $('.discountPrct').hide();
+		// $('.discount').hide();
 		$('.fTotal').hide();
 		$('.basic-session').hide();
 		$('.detail-session').hide();
