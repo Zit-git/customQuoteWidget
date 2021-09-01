@@ -121,8 +121,10 @@ async function fetchPrice(event,thisVal) {
 function calcAmount(event,thisVal){
 	var firstLtr = thisVal.name.substring(0,1); // p or a or s
 	var rowIndex = thisVal.getAttribute("index");
-	var quantityVal = event.target.value || 0;
-	var unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
+	let quantityField = $("#"+firstLtr+"_quantity_"+rowIndex)[0];
+	let quantityVal = quantityField.value || 0;
+	if(quantityVal > 0){
+		var unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
 	var amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
 	var unitPriceVal = unitPrice.value || 0;
 	amount.value = quantityVal * unitPriceVal;
@@ -133,6 +135,11 @@ function calcAmount(event,thisVal){
 	}
 	totalMap[firstLtr].value = roundToTwo(tabTotalVal);
 	calcTotal();
+	}
+	else{
+		quantityField.value = "";
+	}
+	
 }
 // Subform Calculation - end
 var require = (values,by) => {

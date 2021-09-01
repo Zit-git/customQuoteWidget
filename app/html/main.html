@@ -28,6 +28,9 @@
                <button type="reset" class="btn btn-primary ash mr-2" id="cancelBtn" onclick="location.reload();">Cancel</button>
               </li>
               <li class="nav-item">
+               <button type="submit" class="btn btn-primary ash mr-2" id="saveAsDraftBtn">Save as Draft</button>
+             </li>
+              <li class="nav-item">
                 <button type="submit" class="btn btn-primary saveBtn" id="submitBtn">Save</button>
               </li>
             </ul>
@@ -269,7 +272,7 @@
                      <label for="specificGravity" class="mr-sm-2 justify-content-end">Specific Gravity</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <input type="number" class="form-control" id="specificGravity">
+                     <input type="number" class="form-control" id="specificGravity" step="0.01">
                   </div>
                </div>
             </div>
@@ -279,7 +282,7 @@
                      <label for="flowRate" class="mr-sm-2 justify-content-end">Flow Rate</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <input type="number" class="form-control" id="flowRate">
+                     <input type="number" class="form-control" id="flowRate" step="0.01">
                   </div>
                </div>
                <div class="col-sm-6 col-6 form-inline">
@@ -298,7 +301,7 @@
                      <label for="head" class="mr-sm-2 justify-content-end">Head</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <input type="number" class="form-control" id="head">
+                     <input type="number" class="form-control" id="head" step="0.01">
                   </div>
                </div>
                <div class="col-sm-6 col-6 form-inline">
@@ -318,7 +321,7 @@
                      <label for="temperature" class="mr-sm-2 justify-content-end">Temperature</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <input type="number" class="form-control" id="temperature">
+                     <input type="number" class="form-control" id="temperature" step="0.01">
                   </div>
                </div>
                <div class="col-sm-6 col-6 form-inline">
@@ -354,13 +357,13 @@
                   </div>
                </div>
             </div>
-            <div class="row pb-3">
+            <div class="row pb-3" style="display: none;">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
                      <label for="shr" class="mr-sm-2 justify-content-end">Solid Handling Requirement (SHR)</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <input type="number" class="form-control" id="shr">
+                     <input type="number" class="form-control" id="shr" value=0>
                   </div>
                </div>
                <div class="col-sm-6 col-6 form-inline">
@@ -705,7 +708,7 @@
             <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
             <div class="col-sm-1 col-6 form-inline">
             </div>
-            <div class="col-sm-4 col-6 form-inline w175">
+            <!-- <div class="col-sm-4 col-6 form-inline w175">
                <div class="col-sm-5 col-12">
                   <label for="email" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Save as Draft? </label>
                </div>
@@ -721,7 +724,7 @@
                      </label>
                   </div>
                </div>
-            </div>
+            </div> -->
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
          </div>
          <div class="row pb-3 fTotal">

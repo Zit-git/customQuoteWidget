@@ -62,7 +62,21 @@ productType.onchange = typeChange;
 quoteDate.valueAsDate  = currDate;
 //console.log(quoteDate.value); //quoteDate.valueAsDate.toISOString();
 require([subject.id,contactName.id,productType.id],"id");
-require(["optradio1"],"name");
+// require(["optradio1"],"name");
+var initPumpInformation = () => {
+casingMoc.innerHTML = emptyOpt;
+impellerMoc.innerHTML = emptyOpt;
+lubrication.innerHTML = emptyOpt;
+shaftSealing.innerHTML = emptyOpt;
+sealingGlandFlushing.innerHTML = emptyOpt;
+flangeDrilling.innerHTML = emptyOpt;
+}
+var initDetailSpecs = () => {
+	flowRate.value = "";
+	head.value = "";
+	temperature.value = "";
+	specificGravity.value = "";
+}
 // Add row button code - start
 var rowCount = {pumpBody:1,accessoryBody:1,sparePartBody:1};
 async function addRow(thisVal,tabBody){
@@ -177,6 +191,9 @@ async function addRow(thisVal,tabBody){
 					rowField.innerHTML = emptyOpt+finalPump.map(data => {
 						return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
 					}).join("");
+					if(finalPump.length == 1){
+						$("#"+conMap[tabBody]+rowVal).val(finalPump[0].id).change();
+					}
 				}
 				else{
 					swal("Invalid Selection","No porducts available with given values","info");
@@ -280,10 +297,23 @@ var seriesOnChange = async seriesVal => {
 		shaftSealing.innerHTML =emptyOpt+crmSeriesSingle.Series_Seal_Flushing.map(data => '<option value="'+data.Shaft_Sealing+'">'+data.Shaft_Sealing+'</option>').join("");
 		lubrication.innerHTML =emptyOpt+crmSeriesSingle.Bearing_Lubrication.map(data => '<option value="'+data+'">'+data+'</option>').join("");
 		flangeDrilling.innerHTML =emptyOpt+crmSeriesSingle.Flange_Drilling.map(data => '<option value="'+data+'">'+data+'</option>').join("");
+
+		if(crmSeriesSingle.Series_MoC.length == 1){
+			$("#casingMoc").val(crmSeriesSingle.Series_MoC[0].Casing_MoC).change();
+		}
+		if(crmSeriesSingle.Bearing_Lubrication.length == 1){
+			$("#lubrication").val(crmSeriesSingle.Bearing_Lubrication[0]).change();
+		}
+		if(crmSeriesSingle.Series_Seal_Flushing.length == 1){
+			$("#shaftSealing").val(crmSeriesSingle.Series_Seal_Flushing[0].Shaft_Sealing).change();
+		}
+		if(crmSeriesSingle.Flange_Drilling.length == 1){
+			$("#flangeDrilling").val(crmSeriesSingle.Flange_Drilling[0]).change();
+		}
 	}
 }
-function submitFun(thisVal){
-	let quoteStageVal = $("#SAD_No")[0].checked ? "Confirmed" : "Draft";
+function submitFun(submitType){
+	let quoteStageVal = submitType == "submitBtn" ? "Confirmed" : "Draft";
 	// var fields = document.getElementsByClassName("important");
 	// for(let i of fields){
 	// 	if(i.value == ""){
@@ -317,6 +347,7 @@ function submitFun(thisVal){
 		Subject:subject.value,
 		Account_Name:customerName.value,
 		Contact_ID:contactName.value,
+		Contact_Name:contactName.value,
 		Deal_Name:enquiryName.value,
 		Product_Type:productType.value,
 		Quote_Stage:quoteStageVal,
@@ -375,7 +406,7 @@ function submitFun(thisVal){
 	console.log(subCustomData);
 	return false;
 }
-document.getElementById("quoteForm").onsubmit = function(){return submitFun();}
+document.getElementById("quoteForm").onsubmit = function(thisVal){return submitFun(thisVal.submitter.id);}
 var editMode = async quoteId =>{
 	// quoteId = "156506000001896002";
 	selectedQuote = quoteId;
@@ -464,6 +495,9 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 			}
 		});
 	}
+	if(crmContacts.length == 1){
+		$("#contactName").val(crmContacts[0].id).change();
+	}
 	var crmDeals = await getRecords("Deals");
 	enquiryName.innerHTML =emptyOpt+crmDeals.map(data => '<option value="'+data.id+'">'+data.Deal_Name+'</option>').join("");
 	productsDataLis = await getRecords("Products");
@@ -497,7 +531,6 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	var getAllQuotes = await getRecords("Quotes");
 		$("#quoteBody")[0].innerHTML =getAllQuotes.map(data => {
 			if(data.Quote_Stage == "Draft"){
-				console.log(data.id);
 				let tabRow = '<tr>';
 				tabRow += '<td><i class="fa fa-pen btn" data-dismiss="modal" id='+data.id+' onclick="editMode(this.id)"></i></td><td>'+data.Quote_Date+'</td><td>'+data.Subject+'</td><td>'+data.Quote_Stage+'</td><td>'+((data.Deal_Name || {}).name || "")+'</td><td> ₹ '+data.Grand_Total+'</td>';
 				tabRow += '</tr>';
@@ -513,10 +546,18 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		crmPumpTypes.forEach(val => {
 			relatedData = JSON.parse(val.Related_Data || {});
 			if(val.id == pumpType.value && !jQuery.isEmptyObject(relatedData)){
+				shaftSpeed.innerHTML = emptyOpt;
+				size.innerHTML = emptyOpt;
+				initDetailSpecs();
+				$('.apiTable').hide();
+				initPumpInformation();
 				applicationType.innerHTML = emptyOpt+relatedData.Application_Type.map(data => '<option value="'+data.id+'">'+data.name+'</option>').join("");
 				series.innerHTML = emptyOpt+relatedData.Series.map(data => '<option value="'+data.id+'">'+data.name+'</option>').join("");
 			}
 		});
+	}
+	if(crmPumpTypes.length == 1){
+	$("#pumpType").val(crmPumpTypes[0].id).change();
 	}
 	// Route 2 no API
 	series.onchange = event => seriesOnChange(series.value);
@@ -531,6 +572,9 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		crmSeriesSingle.Series_MoC.forEach(val => {
 			if(val.Casing_MoC == casingMoc.value){
 				impellerMoc.innerHTML =	emptyOpt+val.Impeller_MoC.map(impellerVal => '<option value="'+impellerVal+'">'+impellerVal+'</option>').join("");
+				if(val.Impeller_MoC.length == 1){
+					$("#impellerMoc").val(val.Impeller_MoC[0]).change();
+				}
 			}
 		});
 	}
@@ -538,19 +582,24 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		crmSeriesSingle.Series_Seal_Flushing.forEach(val => {
 			if(val.Shaft_Sealing == shaftSealing.value){
 				sealingGlandFlushing.innerHTML = emptyOpt+val.Mechanical_Seal_Flushing.map(sealFlushVal => '<option value="'+sealFlushVal+'">'+sealFlushVal+'</option>').join("");
+				if(val.Mechanical_Seal_Flushing.length == 1){
+					$("#sealingGlandFlushing").val(val.Mechanical_Seal_Flushing[0]).change();
+				}
 			}
 		});
 	}
 	// Route 1 API
 	applicationType.onchange = async event => {
-		temperature.value = "";
-		shr.value = "";
-		specificGravity.value = "";
+		initDetailSpecs();
+		$('.apiTable').hide();
+		initPumpInformation();
 		if(applicationType.value){
 		crmAppTypeSingle = await getSingleRecord("Application_Types",applicationType.value);
 		}
 	}
 	flowRate.onchange = event => {
+		$('.apiTable').hide();
+		initPumpInformation();
 		let flowRateVal = Number(flowRate.value);
 		let flowRateMin = crmPumpTypes[0].Flow_Rate_Min;
 		let flowRateMax = crmPumpTypes[0].Flow_Rate_Max;
@@ -560,6 +609,8 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		}
 	}
 	head.onchange = event => {
+		$('.apiTable').hide();
+		initPumpInformation();
 		let headVal = Number(head.value);
 		let headMin = crmPumpTypes[0].Head_Min;
 		let headMax = crmPumpTypes[0].Head_Max;
@@ -569,6 +620,8 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		}
 	}
 	temperature.onchange = event => {
+		$('.apiTable').hide();
+		initPumpInformation();
 		let tempVal = Number(temperature.value);
 		if(applicationType.value){
 			let tempMin = crmAppTypeSingle.Temperature_Min;
@@ -607,6 +660,8 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		}
 	}
 	specificGravity.onchange = event => {
+		$('.apiTable').hide();
+		initPumpInformation();
 		let specificGravityVal = Number(specificGravity.value);
 		if(applicationType.value){
 			let SpGMin = crmAppTypeSingle.Specific_Gravity_Min;
