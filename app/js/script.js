@@ -3,6 +3,8 @@ var currDate = new Date();
 var currentUser;
 var selectedQuote;
 var productsDataLis = [];
+var accessoryDataLis = [];
+var spareDataLis = [];
 var productsRelations = {};
 var apiTableData;
 var crmPumpTypes;
@@ -15,7 +17,7 @@ var subject = document.getElementById("subject");
 var customerName = document.getElementById("customerName");
 var contactName = document.getElementById("contactName");
 var enquiryName = document.getElementById("enquiryName");
-var productType = document.getElementById("productType");
+var pumpSearchMethod = document.getElementById("pumpSearchMethod");
 var accessoryType = document.getElementById("accessoryType");
 var brand = document.getElementById("brand");
 var quoteStage = document.getElementById("quoteStage");
@@ -40,8 +42,10 @@ var shrUnit = document.getElementById("shrUnit");
 var casingMoc = document.getElementById("casingMoc");
 var shaftSealing = document.getElementById("shaftSealing");
 var impellerMoc = document.getElementById("impellerMoc");
+var shaftMoc = document.getElementById("shaftMoc");
 var sealingGlandFlushing = document.getElementById("sealingGlandFlushing");
 var lubrication = document.getElementById("lubrication");
+var impellerType = document.getElementById("impellerType");
 var flangeDrilling = document.getElementById("flangeDrilling");
 //Table Fields
 var pumpLis = document.getElementsByName("pump");
@@ -50,22 +54,26 @@ var accessoryLis = document.getElementsByName("accessory");
 var accessoryAmtLis = document.getElementsByName("a_amount");
 var sparePartLis = document.getElementsByName("sparePart");
 var sparePartAmtLis = document.getElementsByName("s_amount");
+var otherProductLis = document.getElementsByName("otherProduct");
+var otherProductsAmtLis = document.getElementsByName("o_amount");
 var pumpTotal = document.getElementById("pumpTotal");
 var accessoryTotal = document.getElementById("accessoryTotal");
 var sparePartTotal = document.getElementById("sparePartTotal");
+var otherProductsTotal = document.getElementById("otherProductsTotal");
 var discountPercentage = document.getElementById("discountPercentage");
 var discount = document.getElementById("discount");
-var conMap = {p:pumpAmtLis,a:accessoryAmtLis,s:sparePartAmtLis};
-var totalMap = {p:pumpTotal,a:accessoryTotal,s:sparePartTotal};
+var conMap = {p:pumpAmtLis,a:accessoryAmtLis,s:sparePartAmtLis,o:otherProductsAmtLis};
+var totalMap = {p:pumpTotal,a:accessoryTotal,s:sparePartTotal,o:otherProductsTotal};
 // Expressions
-productType.onchange = typeChange;
+pumpSearchMethod.onchange = showDetail;
 quoteDate.valueAsDate  = currDate;
 //console.log(quoteDate.value); //quoteDate.valueAsDate.toISOString();
-require([subject.id,contactName.id,productType.id],"id");
+require([subject.id,contactName.id],"id");
 // require(["optradio1"],"name");
 var initPumpInformation = () => {
 casingMoc.innerHTML = emptyOpt;
 impellerMoc.innerHTML = emptyOpt;
+shaftMoc.innerHTML = emptyOpt;
 lubrication.innerHTML = emptyOpt;
 shaftSealing.innerHTML = emptyOpt;
 sealingGlandFlushing.innerHTML = emptyOpt;
@@ -78,20 +86,21 @@ var initDetailSpecs = () => {
 	specificGravity.value = "";
 }
 // Add row button code - start
-var rowCount = {pumpBody:1,accessoryBody:1,sparePartBody:1};
+var rowCount = {pumpBody:1,accessoryBody:1,sparePartBody:1,otherProductsBody:1};
 async function addRow(thisVal,tabBody){
 		rowVal = rowCount[tabBody];
-		let conMap = {pumpBody:"pump_",accessoryBody:"accessory_",sparePartBody:"sparePart_"};
+		let conMap = {pumpBody:"pump_",accessoryBody:"accessory_",sparePartBody:"sparePart_",otherProductsBody:"otherProduct_"};
 		let firstLtr = conMap[tabBody].substring(0,1);
 		let mandatoryCheck = false;
 		let routeMethod = false;
 		let serSeries = "";
 		let serSize = "";
 		let serSpeed = "";
-		if(document.getElementById("DYK_Yes").checked && tabBody == "pumpBody"){
+		if(pumpSearchMethod.value == "Route2" && tabBody == "pumpBody"){
 			// Route 2 No API
 			mandatoryCheck = true;
 			routeMethod = true;
+			apiSpecs = "";
 			for(let i of $("#basicSession :input")){
 				if(!i.value){
 					mandatoryCheck = false;
@@ -106,7 +115,7 @@ async function addRow(thisVal,tabBody){
 			serSize = size.value;
 			serSpeed = shaftSpeed.value;
 		}
-		else if(document.getElementById("DYK_No").checked && tabBody == "pumpBody"){
+		else if(pumpSearchMethod.value == "Route1" && tabBody == "pumpBody"){
 			// Route 1 API
 			mandatoryCheck = true;
 			routeMethod = true;
@@ -144,26 +153,71 @@ async function addRow(thisVal,tabBody){
 				swal("Invalid Selection","Select any one of the result in the pump specification list or Click the SEARCH Button","info");
 			}
 		}
+		else if(tabBody == "accessoryBody" || tabBody == "sparePartBody"){
+			if($("#"+tabBody+"Filter")[0].checked){
+			let productsBasedOnPump = [];
+			pumpLis.forEach(val => {
+				relatedRec = productsRelations[val.value] || {};
+					let productsData = relatedRec[tabBody] || [];
+					productsBasedOnPump = [...productsBasedOnPump,...productsData];
+			});
+			if(productsBasedOnPump.length > 0){
+				appendTabRow(tabBody,rowVal);
+				require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
+				rowCount[tabBody]++;
+				let rowField = document.getElementById(conMap[tabBody]+rowVal);
+				rowField.innerHTML = emptyOpt+productsBasedOnPump.map(data => {
+					return '<option value="'+data.id+'">'+data.Display_Name+'-'+data.Product_Code+'</option>';
+				}).join("");
+			}
+			else{
+				swal("Invalid Selection","No porducts available with given values","info");
+			}
+			}
+			else if(tabBody == "accessoryBody" && accessoryType.value != "-None-"){
+				let filterdAccessory = accessoryDataLis.filter(data => data.Accessory_Type == accessoryType.value);
+				if(filterdAccessory.length > 0){
+					appendTabRow(tabBody,rowVal);
+					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
+					rowCount[tabBody]++;
+					let rowField = document.getElementById(conMap[tabBody]+rowVal);
+					rowField.innerHTML = emptyOpt+filterdAccessory.map(data => {
+						return '<option value="'+data.id+'">'+data.Display_Name+'-'+data.Product_Code+'</option>';
+					}).join("");
+				}
+				else{
+					swal("Invalid Selection","No porducts available with given values","info");
+				}
+			}
+			else if(tabBody == "sparePartBody" && $("#sparePumpModel")[0].value != "-None-"){
+				let filterdSpare = spareDataLis.filter(data => data.Pump.id == $("#sparePumpModel")[0].value);
+				if(filterdSpare.length > 0){
+					appendTabRow(tabBody,rowVal);
+					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
+					rowCount[tabBody]++;
+					let rowField = document.getElementById(conMap[tabBody]+rowVal);
+					rowField.innerHTML = emptyOpt+filterdSpare.map(data => {
+						return '<option value="'+data.id+'">'+data.Display_Name+'-'+data.Product_Code+'</option>';
+					}).join("");
+				}
+				else{
+					swal("Invalid Selection","No porducts available with given values","info");
+				}
+			}
+			else{
+				appendTabRow(tabBody,rowVal);
+				require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
+				rowCount[tabBody]++;
+			}
+		}
 		else{
 			appendTabRow(tabBody,rowVal);
 			require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
 			rowCount[tabBody]++;
-			pumpLis.forEach(val => {
-				relatedRec = productsRelations[val.value];
-				if(relatedRec){
-					let productsData = relatedRec[tabBody] || [];
-					if(productsData.length > 0){
-						let rowField = document.getElementById(conMap[tabBody]+rowVal);
-						rowField.innerHTML = emptyOpt+productsData.map(data => {
-							return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
-						}).join("");
-					}
-				}
-			});	
 		}
 		if(mandatoryCheck && routeMethod){
 			let searchMap = {Pump_Type:pumpType.value,Series:serSeries,Shaft_Speed:serSpeed,Size:serSize};
-			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
+			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Shaft_MoC:shaftMoc.value,Impeller_Type:impellerType.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
 			selectData = {...selectData, ...searchMap, ...filterMap};
 			console.log(selectData);
 			let searchQuery = "(";
@@ -189,7 +243,7 @@ async function addRow(thisVal,tabBody){
 					rowCount[tabBody]++;
 					let rowField = document.getElementById(conMap[tabBody]+rowVal);
 					rowField.innerHTML = emptyOpt+finalPump.map(data => {
-						return '<option value="'+data.id+'">'+data.Product_Name+'-'+data.Product_Code+'</option>';
+						return '<option value="'+data.id+'">'+data.Display_Name+'-'+data.Product_Code+'</option>';
 					}).join("");
 					if(finalPump.length == 1){
 						$("#"+conMap[tabBody]+rowVal).val(finalPump[0].id).change();
@@ -286,6 +340,7 @@ function checkApiRow(thisVal){
 var seriesOnChange = async seriesVal => {
 	if(seriesVal){
 		impellerMoc.innerHTML = emptyOpt;
+		shaftMoc.innerHTML = emptyOpt;
 		sealingGlandFlushing.innerHTML = emptyOpt;
 		size.innerHTML = emptyOpt;
 		var shaftSpeedLis = [];
@@ -326,7 +381,7 @@ function submitFun(submitType){
 	// alert("test");
 	console.log(subCustomData);
 	let subDataList = [];
-	[pumpLis,accessoryLis,sparePartLis].forEach(subEach => {
+	[pumpLis,accessoryLis,sparePartLis,otherProductLis].forEach(subEach => {
 		subEach.forEach(data => {
 			if(data.value){
 				let firstLtr = data.name.substring(0,1); // p or a or s
@@ -349,7 +404,7 @@ function submitFun(submitType){
 		Contact_ID:contactName.value,
 		Contact_Name:contactName.value,
 		Deal_Name:enquiryName.value,
-		Product_Type:productType.value,
+		// Product_Type:productType.value,
 		Quote_Stage:quoteStageVal,
 		Quote_Date:quoteDate.value,
 		Customer_Plant:$("#customerPlant")[0].value,
@@ -370,7 +425,7 @@ function submitFun(submitType){
 			let respData = data.data;
 			if(respData){
 				swal(respData[0].code,respData[0].message,"success");
-				window.open(redirectUrl+respData[0].details.id);
+				window.parent.parent.window.location = redirectUrl+respData[0].details.id;
 				location.reload();
 			}
 			else{
@@ -392,7 +447,7 @@ function submitFun(submitType){
 			  let respData = data.data;
 			 if(respData){
 				swal(respData[0].code,respData[0].message,"success");
-				window.open(redirectUrl+respData[0].details.id);
+				window.parent.parent.window.location = redirectUrl+respData[0].details.id;
 				location.reload();
 			 }
 			 else{
@@ -421,12 +476,14 @@ var editMode = async quoteId =>{
 	$("#liquidName")[0].value = getQuote.Liquid_Name;
 	$("#contactName").val((getQuote.Contact_Name || {}).id).change();
 	$("#enquiryName").val((getQuote.Deal_Name || {}).id).change();
-	$("#productType").val(getQuote.Product_Type).change();
+	// $("#productType").val(getQuote.Product_Type).change();
+	$("#pumpSearchMethod").val("NoRoute").change();
 	$("#brand").val(getQuote.Brand).change();
 	$("#quoteStage").val(getQuote.Quote_Stage).change();
 	clearTabRow("pumpBody");
 	clearTabRow("accessoryBody");
 	clearTabRow("sparePartBody");
+	clearTabRow("otherProductsBody");
 	getQuote.Product_Details.forEach(async val => {
 		let getProduct = await getSingleRecord("Products",val.product.id);
 		let tabBody,fieldKey;
@@ -439,6 +496,10 @@ var editMode = async quoteId =>{
 		}else if(getProduct.Product_Category == "Spare Part"){
 			tabBody = "sparePartBody";
 			fieldKey = "sparePart_";
+		}
+		else if(getProduct.Product_Category == "Others"){
+			tabBody = "otherProductsBody";
+			fieldKey = "otherProduct_";
 		}
 		let firstLtr = tabBody.substring(0,1)+"_"; // p or a or s
 		let index = await addRow(this,tabBody);
@@ -461,11 +522,11 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		console.log(currentUser);
 	// Load optionis
 		var quotesFields = await getFields("Quotes");
-		var mapData = {Brand:brand,Accessory_Type:accessoryType,Quote_Stage:quoteStage,Flow_Rate_Unit:flowRateUnit,Head_Unit:headUnit,Temperature_Unit:temperatureUnit,Shaft_Speed:shaftSpeed_API,Shaft_Speed_Unit:shaftSpeedUnit,Solid_Handling_Requirement_Unit:shrUnit};
+		var mapData = {Brand:brand,Accessory_Type:accessoryType,Quote_Stage:quoteStage,Flow_Rate_Unit:flowRateUnit,Head_Unit:headUnit,Temperature_Unit:temperatureUnit,Shaft_Speed:shaftSpeed_API,Shaft_Speed_Unit:shaftSpeedUnit,Solid_Handling_Requirement_Unit:shrUnit,Impeller_Type:impellerType};
 		for(let field of quotesFields){
 			if(mapData[field.api_name]){
 				mapData[field.api_name].innerHTML = field.pick_list_values.map(data => {
-					if(field.api_name == "Accessory_Type"){
+					if(field.api_name == "Accessory_Type" || field.api_name == "Impeller_Type"){
 					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
 					}else if(data.actual_value != "-None-"){
 					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
@@ -504,29 +565,55 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	for (product of productsDataLis){
 		let pumpId = (product.Pump || {}).id;
 		let pumpName = (product.Pump || {}).name;
-		if(pumpId){
-			pumpKey = productsRelations[pumpId] || {};
-			let accLis = pumpKey.accessoryBody || [];
-			let spareLis = pumpKey.sparePartBody || [];
-			if(product.Product_Category == "Accessory"){
-				accLis.push({Product_Name:product.Product_Name,id:product.id,Product_Code:product.Product_Code});
-			}
-			else if(product.Product_Category == "Spare Part"){
-				spareLis.push({Product_Name:product.Product_Name,id:product.id,Product_Code:product.Product_Code});
-			}
-			productsRelations[pumpId] = {Product_Name:pumpName,accessoryBody:accLis,sparePartBody:spareLis};
-		}
-		var eleAndCat = {Pump:pumpLis,Accessory:accessoryLis,Spare_Part:sparePartLis};
-		for(key in eleAndCat){
-		if(product.Product_Category == key.replace("_"," ")){
-			for(let value of eleAndCat[key]){
+		let pumpKey = productsRelations[pumpId] || {};
+		let accLis = pumpKey.accessoryBody || [];
+		let spareLis = pumpKey.sparePartBody || [];
+		if(product.Product_Category == "Pump"){
+			for(let value of pumpLis){
 				let opt = document.createElement("option");
-				opt.text = product.Product_Name +"-"+ product.Product_Code;
+				opt.text = product.Display_Name +"-"+ product.Product_Code;
 				opt.value = product.id;
-					value.add(opt);
+				value.add(opt);
+			}
+			let opt = document.createElement("option");
+			opt.text = product.Display_Name +"-"+ product.Product_Code;
+			opt.value = product.id;
+			$("#sparePumpModel")[0].add(opt);
+		}
+		else if(product.Product_Category == "Accessory"){
+			accessoryDataLis.push(product);
+			for(let value of accessoryLis){
+				let opt = document.createElement("option");
+				opt.text = product.Display_Name +"-"+ product.Product_Code;
+				opt.value = product.id;
+				value.add(opt);
+			}
+			if(pumpId){
+				accLis.push({Display_Name:product.Display_Name,id:product.id,Product_Code:product.Product_Code});
+				productsRelations[pumpId] ={...productsRelations[pumpId],...{Product_Name:pumpName,accessoryBody:accLis}};
 			}
 		}
-	}
+		else if(product.Product_Category == "Spare Part"){
+			spareDataLis.push(product);
+			for(let value of sparePartLis){
+				let opt = document.createElement("option");
+				opt.text = product.Display_Name +"-"+ product.Product_Code;
+				opt.value = product.id;
+				value.add(opt);
+			}
+			if(pumpId){
+				spareLis.push({Display_Name:product.Display_Name,id:product.id,Product_Code:product.Product_Code});
+				productsRelations[pumpId] ={...productsRelations[pumpId],...{Product_Name:pumpName,sparePartBody:spareLis}};
+			}
+		}
+		else if(product.Product_Category == "Others"){
+			for(let value of otherProductLis){
+				let opt = document.createElement("option");
+				opt.text = product.Display_Name +"-"+ product.Product_Code;
+				opt.value = product.id;
+				value.add(opt);
+			}
+		}
 	}
 	var getAllQuotes = await getRecords("Quotes");
 		$("#quoteBody")[0].innerHTML =getAllQuotes.map(data => {
@@ -574,6 +661,10 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				impellerMoc.innerHTML =	emptyOpt+val.Impeller_MoC.map(impellerVal => '<option value="'+impellerVal+'">'+impellerVal+'</option>').join("");
 				if(val.Impeller_MoC.length == 1){
 					$("#impellerMoc").val(val.Impeller_MoC[0]).change();
+				}
+				shaftMoc.innerHTML = emptyOpt+val.Shaft_MoC.map(shaftMoCVal => '<option value="'+shaftMoCVal+'">'+shaftMoCVal+'</option>').join("");
+				if(val.Shaft_MoC.length == 1){
+					$("#shaftMoc").val(val.Shaft_MoC[0]).change();
 				}
 			}
 		});
