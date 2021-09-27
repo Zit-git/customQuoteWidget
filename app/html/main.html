@@ -127,14 +127,13 @@
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-3 col-12">
-               <label for="productType" class="mr-sm-2 justify-content-end">Product Type</label>
+               <label for="pumpSearchMethod" class="mr-sm-2 justify-content-end">Pump Search Method</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="productType">
-                  <option value="">-None-</option>
-                  <option value="Pump">Pump</option>
-                  <option value="Accessory">Accessory</option>
-                  <option value="Spare Part">Spare Part</option>
+               <select class="form-control w-100" id="pumpSearchMethod">
+                  <option value="NoRoute">No Route</option>
+                  <option value="Route1">Route 1</option>
+                  <option value="Route2">Route 2</option>
                </select>
             </div>
          </div>
@@ -149,14 +148,14 @@
       </div>
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
-            <div class="col-sm-3 col-12">
+            <!-- <div class="col-sm-3 col-12">
                <label for="accessoryType" class="mr-sm-2 justify-content-end">Accessory Type</label>
             </div>
             <div class="col-sm-8 col-12">
                <select class="form-control w-100" id="accessoryType">
                   <option value="">-None-</option>
                </select>
-            </div>
+            </div> -->
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
@@ -169,7 +168,7 @@
       </div>
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
-            <div class="col-sm-4 col-12 dyk">
+            <!-- <div class="col-sm-4 col-12 dyk">
                <label for="email" class="mr-sm-2 justify-content-end">Do you know the product series and size?</label>
             </div>
             <div class="col-sm-8 col-12 dyk">
@@ -183,7 +182,7 @@
                   <input type="radio" class="form-check-input show-basic" id="DYK_No" name="optradio" value="no" onclick="showDetail(this)">No
                   </label>
                </div>
-            </div>
+            </div> -->
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
@@ -477,6 +476,29 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
+                     <label for="shaftMoc" class="mr-sm-2 justify-content-end">Shaft MoC</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="shaftMoc">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="sleeveMoC" class="mr-sm-2 justify-content-end">Sleeve MoC</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="sleeveMoC">
+                        <option value="">-None-</option>
+                        <option value="Test">-Test-</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
                      <label for="lubrication" class="mr-sm-2 justify-content-end">Bearing Lubrication</label>
                   </div>
                   <div class="col-sm-8 col-12">
@@ -494,6 +516,20 @@
                         <option value="">-None-</option>
                      </select>
                   </div>
+               </div>
+            </div>
+            <div class="row pb-3">
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-3 col-12">
+                     <label for="impellerType" class="mr-sm-2 justify-content-end">Impeller Type</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="impellerType">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
                </div>
             </div>
          </div>
@@ -556,10 +592,21 @@
                <div class="row pb-3">
                   <div class="col-12" style="display: inherit;">
                      <h4 style="width: auto;">Accessory</h4>
-                     <!-- <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
-                        <input type="checkbox" class="custom-control-input" id="accessoryBodyFilter">
-                        <label class="custom-control-label" for="accessoryBodyFilter">Filter based on pump</label>
-                      </div> -->
+                     <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
+                        <input type="checkbox" class="custom-control-input" id="accessoryBodyFilter" onchange="showFilterField(this)">
+                        <label class="custom-control-label" for="accessoryBodyFilter">Filter based on above pump</label>
+                      </div>
+                  </div>
+                  <div class="col-6 accessoryFilter">
+                     <div class="col-sm-3 col-12">
+                        <label for="accessoryType" class="mr-sm-2 justify-content-end">Accessory Type</label>
+                     </div>
+                     <div class="col-sm-8 col-12">
+                        <select class="form-control w-100" id="accessoryType">
+                           <option value="-None-">-None-</option>
+                        </select>
+                     </div>
+                     <br>
                   </div>
                   <div class="col-12">
                      <div class="table-responsive">
@@ -612,10 +659,21 @@
                <div class="row pb-3">
                   <div class="col-12" style="display: inherit;">
                      <h4 style="display: inherit;">Spare Part</h4>
-                     <!-- <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
-                        <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter">
-                        <label class="custom-control-label" for="sparePartBodyFilter">Filter based on pump</label>
-                      </div> -->
+                     <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
+                        <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter" onchange="showFilterField(this)">
+                        <label class="custom-control-label" for="sparePartBodyFilter">Filter based on above pump</label>
+                      </div>
+                  </div>
+                  <div class="col-6 spareFilter">
+                     <div class="col-sm-3 col-12">
+                        <label for="sparePumpModel" class="mr-sm-2 justify-content-end">Pump Model</label>
+                     </div>
+                     <div class="col-sm-8 col-12">
+                        <select class="form-control w-100" id="sparePumpModel">
+                           <option value="-None-">-None-</option>
+                        </select>
+                     </div>
+                     <br>
                   </div>
                   <div class="col-12">
                      <div class="table-responsive">
@@ -659,6 +717,62 @@
                </div>
                <div class="col-sm-7 col-12">
                   <input type="text" class="form-control symbol-unit" id="sparePartTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+               </div>
+            </div>
+            <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="otherProducts-session">
+            <div class="container-fluid">
+               <div class="row pb-3">
+                  <div class="col-12" style="display: inherit;">
+                     <h4 style="display: inherit;">Other Products</h4>
+                     <!-- <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
+                        <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter" onchange="showFilterField(this)">
+                        <label class="custom-control-label" for="sparePartBodyFilter">Filter based on above pump</label>
+                      </div> -->
+                  </div>
+                  <div class="col-12">
+                     <div class="table-responsive">
+                        <table id="otherProductsTable" class="table table-bordered">
+                           <thead>
+                              <tr>
+                                 <th class="th300">Product</th>
+                                 <th class="th45">Quantity</th>
+                                 <th class="th45">Unit Price</th>
+                                 <th class="th45">Amount</th>
+                                 <th style="border: none;"></th>
+                              </tr>
+                           </thead>
+                           <tbody id="otherProductsBody">
+                              <tr style="display: none;">
+                                 <td>
+                                    <select class="form-control w-100" name="otherProduct" id="otherProduct_###" index="###" onchange="fetchPrice(event,this)">
+                                       <option value="">-None-</option>
+                                    </select>
+                                    <textarea class='form-control' rows='5' name="o_description" id='o_description_###' index="###" placeholder="Description" disabled></textarea>
+                                 </td>
+                                 <td><input type="number" class="form-control" name="o_quantity" id="o_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
+                                 <td><input type="text" class="form-control symbol-unit" name="o_unitPrice" id="o_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td><input type="text" class="form-control symbol-unit" name="o_amount" id="o_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="o_delete_###" index="###" onclick="delRow(this)"></i></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <button type="button" class="btn border" onClick="addRow(this,'otherProductsBody')"><i class="fas fa-plus"></i> Add Row</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row pb-3 otherProductsTotal">
+            <div class="col-sm-4 col-6 form-inline hide-mobile"></div>
+            <div class="col-sm-1 col-6 form-inline"></div>
+            <div class="col-sm-4 col-6 form-inline w175">
+               <div class="col-sm-5 col-12">
+                  <label for="otherProductsTotal" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Other Products Total</label>
+               </div>
+               <div class="col-sm-7 col-12">
+                  <input type="text" class="form-control symbol-unit" id="otherProductsTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>

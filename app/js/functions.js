@@ -56,7 +56,7 @@ var clearTabRow = tabBodyId => {
 // Clear subfrom rows - end
 // Delete subfrom row - start
 function delRow(thisValue){
-	var firstLtr = thisValue.id.substring(0,1); // p or a or s
+	var firstLtr = thisValue.id.substring(0,1); // p or a or s or o
 	var parNode = thisValue.closest("tr");
 	var rowIndex = thisValue.getAttribute("index");
 	var amountVal = document.getElementById(firstLtr+"_amount_"+rowIndex).value || 0;
@@ -90,7 +90,7 @@ async function fetchPrice(event,thisVal) {
 	if(productId){
 	let crmProductSingle = await getSingleRecord("Products",productId);
 	console.log(crmProductSingle);
-	let firstLtr = thisVal.name.substring(0,1); // p or a or s
+	let firstLtr = thisVal.name.substring(0,1); // p or a or s or o
 	let descriptionVal = crmProductSingle.Description || "";
 	if(firstLtr == "p"){ //pump
 		let finalTxt = "\nDatasheet ref nr: "+ (crmProductSingle.TDS_Ref || "NA") + " (For operating limits and warranty conditions check the datasheet)";
@@ -119,7 +119,7 @@ async function fetchPrice(event,thisVal) {
 }
 }
 function calcAmount(event,thisVal){
-	var firstLtr = thisVal.name.substring(0,1); // p or a or s
+	var firstLtr = thisVal.name.substring(0,1); // p or a or s or o
 	var rowIndex = thisVal.getAttribute("index");
 	let quantityField = $("#"+firstLtr+"_quantity_"+rowIndex)[0];
 	let quantityVal = quantityField.value || 0;
@@ -231,105 +231,106 @@ var getFields = async entity =>{
 // $('#pumpTotal')[0].value = 0;
 // $('#accessoryTotal')[0].value = 0;
 // $('#spareTotal')[0].value = 0;
-$('.basic-session, .detail-session, .pumpInfo-session, .pump-session, .accessory-session, .spare-session').hide();
-$('.dyk').hide();
-$('.pumpTotal').hide();
-$('.accessoryTotal').hide();
-$('.spareTotal').hide();
-$('.subTotal').hide();
+$('.basic-session, .detail-session, .pumpInfo-session').hide();
+// $('.dyk').hide();
+// $('.pumpTotal').hide();
+// $('.accessoryTotal').hide();
+// $('.spareTotal').hide();
+// $('.subTotal').hide();
 $('.discountPrct').hide();
 $('.discount').hide();
-$('.fTotal').hide();
+// $('.fTotal').hide();
 $('.apiTable').hide();
-hide("accessoryType","select");
-function typeChange(){		
-	if (this.value === "Pump") {
-		$('.pump-session, .accessory-session, .spare-session').show();
-		$('.dyk').show();
-		$('.pumpTotal').show();
-		$('.accessoryTotal').show();
-		$('.spareTotal').show();
-		$('.subTotal').show();
-		// $('.discountPrct').show();
-		// $('.discount').show();
-		$('.fTotal').show();
-		hide("accessoryType","select");
-		clearTabRow("pumpBody");
-		clearTabRow("accessoryBody");
-		clearTabRow("sparePartBody");
-		$('#pumpTotal')[0].value = 0;
-		$('#accessoryTotal')[0].value = 0;
-		$('#sparePartTotal')[0].value = 0;	
-	} else if (this.value === "Accessory") {
-		show("accessoryType","select");
-		$('.pump-session, .spare-session').hide();
-		$('.accessory-session').show();
-		$('.dyk').hide();
-		$('.pumpTotal').hide();
-		$('.accessoryTotal').show();
-		$('.spareTotal').hide();
-		$('.subTotal').show();
-		// $('.discountPrct').show();
-		// $('.discount').show();
-		$('.fTotal').show();
-		$('.basic-session').hide();
-		$('.detail-session').hide();
-		$('.pumpInfo-session').hide();
-		clearTabRow("pumpBody");
-		clearTabRow("accessoryBody");
-		clearTabRow("sparePartBody");
-		$('#pumpTotal')[0].value = 0;
-		$('#accessoryTotal')[0].value = 0;
-		$('#sparePartTotal')[0].value = 0;	
-		showDetailElse();
-	} else if (this.value === "Spare Part") {
-		$('.pump-session, .accessory-session').hide();
-		$('.spare-session').show();
-		$('.dyk').hide();
-		$('.pumpTotal').hide();
-		$('.accessoryTotal').hide();
-		$('.spareTotal').show();
-		$('.subTotal').show();
-		// $('.discountPrct').show();
-		// $('.discount').show();
-		$('.fTotal').show();
-		$('.basic-session').hide();
-		$('.detail-session').hide();
-		$('.pumpInfo-session').hide();
-		hide("accessoryType","select");
-		clearTabRow("pumpBody");
-		clearTabRow("accessoryBody");
-		clearTabRow("sparePartBody");
-		$('#pumpTotal')[0].value = 0;
-		$('#accessoryTotal')[0].value = 0;
-		$('#sparePartTotal')[0].value = 0;	
-		showDetailElse();
-	} else {
-		$('.pump-session, .accessory-session, .spare-session').hide();
-		$('.dyk').hide();
-		$('.pumpTotal').hide();
-		$('.accessoryTotal').hide();
-		$('.spareTotal').hide();
-		$('.subTotal').hide();
-		// $('.discountPrct').hide();
-		// $('.discount').hide();
-		$('.fTotal').hide();
-		$('.basic-session').hide();
-		$('.detail-session').hide();
-		$('.pumpInfo-session').hide();
-		hide("accessoryType","select");
-		clearTabRow("pumpBody");
-		clearTabRow("accessoryBody");
-		clearTabRow("sparePartBody");
-		$('#pumpTotal')[0].value = 0;
-		$('#accessoryTotal')[0].value = 0;
-		$('#sparePartTotal')[0].value = 0;	
-	}
+// hide("accessoryType","select");
+// function typeChange(){		
+// 	if (this.value === "Pump") {
+// 		$('.pump-session, .accessory-session, .spare-session').show();
+// 		$('.dyk').show();
+// 		$('.pumpTotal').show();
+// 		$('.accessoryTotal').show();
+// 		$('.spareTotal').show();
+// 		$('.subTotal').show();
+// 		// $('.discountPrct').show();
+// 		// $('.discount').show();
+// 		$('.fTotal').show();
+// 		hide("accessoryType","select");
+// 		clearTabRow("pumpBody");
+// 		clearTabRow("accessoryBody");
+// 		clearTabRow("sparePartBody");
+// 		$('#pumpTotal')[0].value = 0;
+// 		$('#accessoryTotal')[0].value = 0;
+// 		$('#sparePartTotal')[0].value = 0;	
+// 	} else if (this.value === "Accessory") {
+// 		show("accessoryType","select");
+// 		$('.pump-session, .spare-session').hide();
+// 		$('.accessory-session').show();
+// 		$('.dyk').hide();
+// 		$('.pumpTotal').hide();
+// 		$('.accessoryTotal').show();
+// 		$('.spareTotal').hide();
+// 		$('.subTotal').show();
+// 		// $('.discountPrct').show();
+// 		// $('.discount').show();
+// 		$('.fTotal').show();
+// 		$('.basic-session').hide();
+// 		$('.detail-session').hide();
+// 		$('.pumpInfo-session').hide();
+// 		clearTabRow("pumpBody");
+// 		clearTabRow("accessoryBody");
+// 		clearTabRow("sparePartBody");
+// 		$('#pumpTotal')[0].value = 0;
+// 		$('#accessoryTotal')[0].value = 0;
+// 		$('#sparePartTotal')[0].value = 0;	
+// 		showDetailElse();
+// 	} else if (this.value === "Spare Part") {
+// 		$('.pump-session, .accessory-session').hide();
+// 		$('.spare-session').show();
+// 		$('.dyk').hide();
+// 		$('.pumpTotal').hide();
+// 		$('.accessoryTotal').hide();
+// 		$('.spareTotal').show();
+// 		$('.subTotal').show();
+// 		// $('.discountPrct').show();
+// 		// $('.discount').show();
+// 		$('.fTotal').show();
+// 		$('.basic-session').hide();
+// 		$('.detail-session').hide();
+// 		$('.pumpInfo-session').hide();
+// 		hide("accessoryType","select");
+// 		clearTabRow("pumpBody");
+// 		clearTabRow("accessoryBody");
+// 		clearTabRow("sparePartBody");
+// 		$('#pumpTotal')[0].value = 0;
+// 		$('#accessoryTotal')[0].value = 0;
+// 		$('#sparePartTotal')[0].value = 0;	
+// 		showDetailElse();
+// 	} else {
+// 		$('.pump-session, .accessory-session, .spare-session').hide();
+// 		$('.dyk').hide();
+// 		$('.pumpTotal').hide();
+// 		$('.accessoryTotal').hide();
+// 		$('.spareTotal').hide();
+// 		$('.subTotal').hide();
+// 		// $('.discountPrct').hide();
+// 		// $('.discount').hide();
+// 		$('.fTotal').hide();
+// 		$('.basic-session').hide();
+// 		$('.detail-session').hide();
+// 		$('.pumpInfo-session').hide();
+// 		hide("accessoryType","select");
+// 		clearTabRow("pumpBody");
+// 		clearTabRow("accessoryBody");
+// 		clearTabRow("sparePartBody");
+// 		$('#pumpTotal')[0].value = 0;
+// 		$('#accessoryTotal')[0].value = 0;
+// 		$('#sparePartTotal')[0].value = 0;	
+// 	}
 
-}
+// }
 function showDetail(thisVal){
-	if (thisVal.value == 'no') {
-		// Route 2 API
+	console.log(this.value);
+	if (this.value == 'Route1') {
+		// Route 1 API
 		$('.basic-session').show();
 		$('.detail-session').show();
 		$('.pumpInfo-session').show();
@@ -347,8 +348,8 @@ function showDetail(thisVal){
 			require([i.id],"id");
 		}
 		require(["pumpType"],"id");
-	} else if(thisVal.value == 'yes') {
-		// Route 1 No API
+	} else if(this.value == 'Route2') {
+		// Route 2 No API
 		$('.basic-session').show();
 		$('.detail-session').hide();
 		$('.pumpInfo-session').show();
@@ -366,20 +367,55 @@ function showDetail(thisVal){
 			notRequire([i.id],"id");
 		}
 	}
+	else if(this.value == 'NoRoute') {
+		// No Route
+		$('.basic-session').hide();
+		$('.detail-session').hide();
+		$('.pumpInfo-session').hide();
+		
+		// show("series","select");
+		// show("shaftSpeed","select");
+		// show("size","select");
+		for(let i of $("#basicSession :input")){
+			notRequire([i.id],"id");
+		}
+		for(let i of $("#pumpInfoSession :input")){
+			notRequire([i.id],"id");
+		}
+		for(let i of $("#detailSession :input")){
+			notRequire([i.id],"id");
+		}
+	}
 }
-function showDetailElse(){
-	for(let i of document.getElementsByName("optradio")){
-		i.checked = false;
+var showFilterField = thisVal =>{
+	if(thisVal.id == "accessoryBodyFilter" && thisVal.checked){
+		$("#accessoryType")[0].value = "-None-";
+		$('.accessoryFilter').hide();
 	}
-	for(let i of $("#basicSession :input")){
-		notRequire([i.id],"id");
+	else if(thisVal.id == "accessoryBodyFilter" && thisVal.checked == false){
+		$('.accessoryFilter').show();
 	}
-	for(let i of $("#pumpInfoSession :input")){
-		notRequire([i.id],"id");
+	if(thisVal.id == "sparePartBodyFilter" && thisVal.checked){
+		$("#sparePumpModel")[0].value = "-None-";
+		$('.spareFilter').hide();
 	}
-	for(let i of $("#detailSession :input")){
-		notRequire([i.id],"id");
+	else if(thisVal.id == "sparePartBodyFilter" && thisVal.checked == false){
+		$('.spareFilter').show();
 	}
 }
+// function showDetailElse(){
+// 	for(let i of document.getElementsByName("optradio")){
+// 		i.checked = false;
+// 	}
+// 	for(let i of $("#basicSession :input")){
+// 		notRequire([i.id],"id");
+// 	}
+// 	for(let i of $("#pumpInfoSession :input")){
+// 		notRequire([i.id],"id");
+// 	}
+// 	for(let i of $("#detailSession :input")){
+// 		notRequire([i.id],"id");
+// 	}
+// }
 
 // Hide and Show - end
