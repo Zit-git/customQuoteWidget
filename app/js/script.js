@@ -426,7 +426,7 @@ function submitFun(submitType){
 			if(respData){
 				swal(respData[0].code,respData[0].message,"success");
 				window.parent.parent.window.location = redirectUrl+respData[0].details.id;
-				location.reload();
+				location.reload();//
 			}
 			else{
 				swal("Failed","Unkown error","error");
