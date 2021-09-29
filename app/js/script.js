@@ -42,6 +42,7 @@ var shrUnit = document.getElementById("shrUnit");
 var casingMoc = document.getElementById("casingMoc");
 var shaftSealing = document.getElementById("shaftSealing");
 var impellerMoc = document.getElementById("impellerMoc");
+var sleeveMoC = document.getElementById("sleeveMoC");
 var shaftMoc = document.getElementById("shaftMoc");
 var sealingGlandFlushing = document.getElementById("sealingGlandFlushing");
 var lubrication = document.getElementById("lubrication");
@@ -74,6 +75,8 @@ var initPumpInformation = () => {
 casingMoc.innerHTML = emptyOpt;
 impellerMoc.innerHTML = emptyOpt;
 shaftMoc.innerHTML = emptyOpt;
+sleeveMoC.innerHTML = emptyOpt;
+impellerType.value = "-None-";
 lubrication.innerHTML = emptyOpt;
 shaftSealing.innerHTML = emptyOpt;
 sealingGlandFlushing.innerHTML = emptyOpt;
@@ -217,7 +220,7 @@ async function addRow(thisVal,tabBody){
 		}
 		if(mandatoryCheck && routeMethod){
 			let searchMap = {Pump_Type:pumpType.value,Series:serSeries,Shaft_Speed:serSpeed,Size:serSize};
-			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Shaft_MoC:shaftMoc.value,Impeller_Type:impellerType.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
+			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Shaft_MoC:shaftMoc.value,Sleeve_MoC:sleeveMoC.value,Impeller_Type:impellerType.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
 			selectData = {...selectData, ...searchMap, ...filterMap};
 			console.log(selectData);
 			let searchQuery = "(";
@@ -341,6 +344,8 @@ var seriesOnChange = async seriesVal => {
 	if(seriesVal){
 		impellerMoc.innerHTML = emptyOpt;
 		shaftMoc.innerHTML = emptyOpt;
+		sleeveMoC.innerHTML = emptyOpt;
+		impellerType.value = "-None-";
 		sealingGlandFlushing.innerHTML = emptyOpt;
 		size.innerHTML = emptyOpt;
 		var shaftSpeedLis = [];
@@ -668,6 +673,28 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				}
 			}
 		});
+	}
+	impellerMoc.onchange = async event => {
+		if(crmSeriesSingle.SleeveMoC_Data){
+			let sleeveData = JSON.parse(crmSeriesSingle.SleeveMoC_Data);
+			sleeveData.forEach(obj => {
+				if(obj.Casing_MoC == casingMoc.value){
+					obj.Impeller_List.forEach(impeller => {
+						if(impeller.Impeller_MoC == impellerMoc.value){
+							sleeveMoC.innerHTML = emptyOpt+impeller.Sleeve_MoC.map(sleeveVal => '<option value="'+sleeveVal+'">'+sleeveVal+'</option>').join("");
+							if(impeller.Sleeve_MoC.length == 1){
+								$("#sleeveMoC").val(impeller.Sleeve_MoC[0]).change();
+							}
+						}
+					});
+				}
+			});
+		}
+		else{
+			let productFields = await ZOHO.CRM.META.getFields({"Entity":"Products"});
+    		let sleeveMocValue = productFields.fields.filter(field => field.api_name == "Sleeve_MoC");
+			sleeveMoC.innerHTML = sleeveMocValue[0].pick_list_values.map(val => "<option value='"+val.display_value+"'>"+val.display_value+"</option>").join("");
+		}
 	}
 	shaftSealing.onchange = event => {
 		crmSeriesSingle.Series_Seal_Flushing.forEach(val => {
