@@ -12,7 +12,7 @@ var crmAppTypeSingle;
 var crmSeries;
 var crmSeriesSingle;
 var crmSizes;
-var emptyOpt = '<option value="">-None-</option>';
+var emptyOpt = '<option value="">Please Select</option>';
 var subject = document.getElementById("subject");
 var customerName = document.getElementById("customerName");
 var contactName = document.getElementById("contactName");
@@ -174,7 +174,7 @@ async function addRow(thisVal,tabBody){
 				}).join("");
 			}
 			else{
-				swal("Invalid Selection","No porducts available with given values","info");
+				swal("Invalid Selection","No products available with given values","info");
 			}
 			}
 			else if(tabBody == "accessoryBody" && accessoryType.value != "-None-"){
@@ -189,7 +189,7 @@ async function addRow(thisVal,tabBody){
 					}).join("");
 				}
 				else{
-					swal("Invalid Selection","No porducts available with given values","info");
+					swal("Invalid Selection","No products available with given values","info");
 				}
 			}
 			else if(tabBody == "sparePartBody" && $("#sparePumpModel")[0].value != "-None-"){
@@ -204,7 +204,7 @@ async function addRow(thisVal,tabBody){
 					}).join("");
 				}
 				else{
-					swal("Invalid Selection","No porducts available with given values","info");
+					swal("Invalid Selection","No products available with given values","info");
 				}
 			}
 			else{
@@ -253,7 +253,7 @@ async function addRow(thisVal,tabBody){
 					}
 				}
 				else{
-					swal("Invalid Selection","No porducts available with given values","info");
+					swal("Invalid Selection","No products available with given values","info");
 				}
 		}
 		else if(routeMethod){
@@ -409,7 +409,7 @@ function submitFun(submitType){
 		Contact_ID:contactName.value,
 		Contact_Name:contactName.value,
 		Deal_Name:enquiryName.value,
-		// Product_Type:productType.value,
+		Description:$("#customerNotes")[0].value,
 		Quote_Stage:quoteStageVal,
 		Quote_Date:quoteDate.value,
 		Customer_Plant:$("#customerPlant")[0].value,
@@ -466,7 +466,25 @@ function submitFun(submitType){
 	console.log(subCustomData);
 	return false;
 }
-document.getElementById("quoteForm").onsubmit = function(thisVal){return submitFun(thisVal.submitter.id);}
+document.getElementById("quoteForm").onsubmit = function(thisVal){
+	if(thisVal.submitter.id == "submitBtn"){
+		swal({
+			title: "Disclaimer",
+			text: "I / we hereby confirm that the data entered and the product(s) selected are as per the application / customer requirements after reviewing the performance parameters and the operational limits as per the literature provided by Flowmart India Pvt. Ltd..FlowMart India Pvt. Ltd. bears no responsibility regarding the suitability of the selected product(s) for the desired application as long as the operational limits are adhered to.",
+			icon: "info",
+			buttons: ["Cancel","I Agree"]
+		  }).then((agreed) => {
+			if (agreed) {
+				return submitFun(thisVal.submitter.id);
+			}
+		  });
+		  return false;
+	}
+	else{
+		return submitFun(thisVal.submitter.id);
+	}
+}
+	
 var editMode = async quoteId =>{
 	// quoteId = "156506000001896002";
 	selectedQuote = quoteId;
@@ -492,17 +510,17 @@ var editMode = async quoteId =>{
 	getQuote.Product_Details.forEach(async val => {
 		let getProduct = await getSingleRecord("Products",val.product.id);
 		let tabBody,fieldKey;
-		if(getProduct.Product_Category == "Pump"){
+		if(getProduct.Product_Category == "Pumps"){
 			tabBody = "pumpBody";
 			fieldKey = "pump_";
-		}else if(getProduct.Product_Category == "Accessory"){
+		}else if(getProduct.Product_Category == "Accessories"){
 			tabBody = "accessoryBody";
 			fieldKey = "accessory_";
-		}else if(getProduct.Product_Category == "Spare Part"){
+		}else if(getProduct.Product_Category == "Spare part of Pumps"){
 			tabBody = "sparePartBody";
 			fieldKey = "sparePart_";
 		}
-		else if(getProduct.Product_Category == "Others"){
+		else if(getProduct.Product_Category == "Mixers, Aerators & Related Products"){
 			tabBody = "otherProductsBody";
 			fieldKey = "otherProduct_";
 		}
@@ -527,15 +545,23 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		console.log(currentUser);
 	// Load optionis
 		var quotesFields = await getFields("Quotes");
-		var mapData = {Brand:brand,Accessory_Type:accessoryType,Quote_Stage:quoteStage,Flow_Rate_Unit:flowRateUnit,Head_Unit:headUnit,Temperature_Unit:temperatureUnit,Shaft_Speed:shaftSpeed_API,Shaft_Speed_Unit:shaftSpeedUnit,Solid_Handling_Requirement_Unit:shrUnit,Impeller_Type:impellerType};
+		var mapData = {Brand:brand,Quote_Stage:quoteStage,Flow_Rate_Unit:flowRateUnit,Head_Unit:headUnit,Temperature_Unit:temperatureUnit,Shaft_Speed_Unit:shaftSpeedUnit,Solid_Handling_Requirement_Unit:shrUnit};
 		for(let field of quotesFields){
 			if(mapData[field.api_name]){
 				mapData[field.api_name].innerHTML = field.pick_list_values.map(data => {
-					if(field.api_name == "Accessory_Type" || field.api_name == "Impeller_Type"){
-					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
-					}else if(data.actual_value != "-None-"){
+					if(data.actual_value != "-None-"){
 					return '<option value="'+data.display_value+'">'+data.display_value+'</option>';
 					}}).join("");
+			}
+		}
+		var productFields = await getFields("Products");
+		var productMapData = {Accessory_Type:accessoryType,Shaft_Speed:shaftSpeed_API,Impeller_Type:impellerType};
+		for(let field of productFields){
+			if(productMapData[field.api_name]){
+				productMapData[field.api_name].innerHTML = field.pick_list_values.map(data => {
+					let displayValue = data.display_value == "-None-" ? "Please Select" : data.display_value;
+					return '<option value="'+data.display_value+'">'+displayValue+'</option>';
+					}).join("");
 			}
 		}
 	var crmContacts = await getRecords("Contacts");
@@ -573,7 +599,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		let pumpKey = productsRelations[pumpId] || {};
 		let accLis = pumpKey.accessoryBody || [];
 		let spareLis = pumpKey.sparePartBody || [];
-		if(product.Product_Category == "Pump"){
+		if(product.Product_Category == "Pumps"){
 			for(let value of pumpLis){
 				let opt = document.createElement("option");
 				opt.text = product.Display_Name +"-"+ product.Product_Code;
@@ -585,7 +611,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 			opt.value = product.id;
 			$("#sparePumpModel")[0].add(opt);
 		}
-		else if(product.Product_Category == "Accessory"){
+		else if(product.Product_Category == "Accessories"){
 			accessoryDataLis.push(product);
 			for(let value of accessoryLis){
 				let opt = document.createElement("option");
@@ -598,7 +624,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				productsRelations[pumpId] ={...productsRelations[pumpId],...{Product_Name:pumpName,accessoryBody:accLis}};
 			}
 		}
-		else if(product.Product_Category == "Spare Part"){
+		else if(product.Product_Category == "Spare part of Pumps"){
 			spareDataLis.push(product);
 			for(let value of sparePartLis){
 				let opt = document.createElement("option");
@@ -611,7 +637,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				productsRelations[pumpId] ={...productsRelations[pumpId],...{Product_Name:pumpName,sparePartBody:spareLis}};
 			}
 		}
-		else if(product.Product_Category == "Others"){
+		else if(product.Product_Category == "Mixers, Aerators & Related Products"){
 			for(let value of otherProductLis){
 				let opt = document.createElement("option");
 				opt.text = product.Display_Name +"-"+ product.Product_Code;
@@ -691,7 +717,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 			});
 		}
 		else{
-			let productFields = await ZOHO.CRM.META.getFields({"Entity":"Products"});
+			// let productFields = await ZOHO.CRM.META.getFields({"Entity":"Products"});
     		let sleeveMocValue = productFields.fields.filter(field => field.api_name == "Sleeve_MoC");
 			sleeveMoC.innerHTML = sleeveMocValue[0].pick_list_values.map(val => "<option value='"+val.display_value+"'>"+val.display_value+"</option>").join("");
 		}

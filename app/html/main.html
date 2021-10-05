@@ -127,13 +127,11 @@
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-3 col-12">
-               <label for="pumpSearchMethod" class="mr-sm-2 justify-content-end">Pump Search Method</label>
+               <label for="brand" class="mr-sm-2 justify-content-end">Brand</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="pumpSearchMethod">
-                  <option value="NoRoute">No Route</option>
-                  <option value="Route1">Route 1</option>
-                  <option value="Route2">Route 2</option>
+               <select class="form-control w-100" id="brand">
+                  <option value="">-None-</option>
                </select>
             </div>
          </div>
@@ -148,14 +146,12 @@
       </div>
       <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
-            <!-- <div class="col-sm-3 col-12">
-               <label for="accessoryType" class="mr-sm-2 justify-content-end">Accessory Type</label>
+            <div class="col-sm-3 col-12">
+               <label for="customerNotes" class="mr-sm-2 justify-content-end">Customer Notes</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="accessoryType">
-                  <option value="">-None-</option>
-               </select>
-            </div> -->
+               <textarea class="form-control w-100" id="customerNotes"></textarea>
+            </div>
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
@@ -166,36 +162,24 @@
             </div>
          </div>
       </div>
-      <div class="row pb-3">
-         <div class="col-sm-6 col-6 form-inline">
-            <!-- <div class="col-sm-4 col-12 dyk">
-               <label for="email" class="mr-sm-2 justify-content-end">Do you know the product series and size?</label>
-            </div>
-            <div class="col-sm-8 col-12 dyk">
-               <div class="form-check-inline">
-                  <label class="form-check-label">
-                  <input type="radio" class="form-check-input show-basic" id="DYK_Yes" name="optradio" value="yes" onclick="showDetail(this)">Yes
-                  </label>
-               </div>
-               <div class="form-check-inline">
-                  <label class="form-check-label">
-                  <input type="radio" class="form-check-input show-basic" id="DYK_No" name="optradio" value="no" onclick="showDetail(this)">No
-                  </label>
-               </div>
-            </div> -->
+      <div class="first-session">
+         <div class="col-12">
+            <h4>Pumps</h4>
          </div>
+         <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
-            <div class="col-sm-4 col-12">
-               <label for="brand" class="mr-sm-2 justify-content-end">Brand</label>
+            <div class="col-sm-3 col-12">
+               <label for="pumpSearchMethod" class="mr-sm-2 justify-content-end">Pump Search Method</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="brand">
-                  <option value="">-None-</option>
+               <select class="form-control w-100" id="pumpSearchMethod">
+                  <option value="NoRoute">Search from total pumps list</option>
+                  <option value="Route1">Select from flowrate and head requirements</option>
+                  <option value="Route2">Select from known series, models & sizes</option>
                </select>
             </div>
          </div>
       </div>
-      <div class="first-session">
          <div class="basic-session" id="basicSession">
             <div class="row pb-3">
                <div class="col-12">
@@ -432,7 +416,7 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="casingMoc" class="mr-sm-2 justify-content-end">Casing Moc</label>
+                     <label for="casingMoc" class="mr-sm-2 justify-content-end">Casing MoC</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="casingMoc">
@@ -454,10 +438,10 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="shaftMoc" class="mr-sm-2 justify-content-end">Shaft MoC</label>
+                     <label for="impellerMoc" class="mr-sm-2 justify-content-end">Impeller MoC</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <select class="form-control w-100" id="shaftMoc">
+                     <select class="form-control w-100" id="impellerMoc">
                         <option value="">-None-</option>
                      </select>
                   </div>
@@ -476,10 +460,10 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="impellerMoc" class="mr-sm-2 justify-content-end">Impeller Moc</label>
+                     <label for="impellerType" class="mr-sm-2 justify-content-end">Impeller Type</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <select class="form-control w-100" id="impellerMoc">
+                     <select class="form-control w-100" id="impellerType">
                         <option value="">-None-</option>
                      </select>
                   </div>
@@ -498,10 +482,10 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="sleeveMoC" class="mr-sm-2 justify-content-end">Sleeve MoC</label>
+                     <label for="shaftMoc" class="mr-sm-2 justify-content-end">Shaft MoC</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <select class="form-control w-100" id="sleeveMoC">
+                     <select class="form-control w-100" id="shaftMoc">
                         <option value="">-None-</option>
                      </select>
                   </div>
@@ -520,10 +504,10 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="impellerType" class="mr-sm-2 justify-content-end">Impeller Type</label>
+                     <label for="sleeveMoC" class="mr-sm-2 justify-content-end">Sleeve MoC</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <select class="form-control w-100" id="impellerType">
+                     <select class="form-control w-100" id="sleeveMoC">
                         <option value="">-None-</option>
                      </select>
                   </div>
@@ -536,7 +520,7 @@
             <div class="container-fluid">
                <div class="row pb-3">
                   <div class="col-12">
-                     <h4>Pump</h4>
+                     <!-- <h4>Pump</h4> -->
                   </div>
                   <div class="col-12">
                      <table id="pumpTable" class="table table-bordered">
@@ -590,7 +574,7 @@
             <div class="container-fluid">
                <div class="row pb-3">
                   <div class="col-12" style="display: inherit;">
-                     <h4 style="width: auto;">Accessory</h4>
+                     <h4 style="width: auto;">Accessories</h4>
                      <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
                         <input type="checkbox" class="custom-control-input" id="accessoryBodyFilter" onchange="showFilterField(this)">
                         <label class="custom-control-label" for="accessoryBodyFilter">Filter based on above pump</label>
@@ -657,7 +641,7 @@
             <div class="container-fluid">
                <div class="row pb-3">
                   <div class="col-12" style="display: inherit;">
-                     <h4 style="display: inherit;">Spare Part</h4>
+                     <h4 style="display: inherit;">Spare part of Pumps</h4>
                      <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
                         <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter" onchange="showFilterField(this)">
                         <label class="custom-control-label" for="sparePartBodyFilter">Filter based on above pump</label>
@@ -669,7 +653,7 @@
                      </div>
                      <div class="col-sm-8 col-12">
                         <select class="form-control w-100" id="sparePumpModel">
-                           <option value="-None-">-None-</option>
+                           <option value="-None-">Please Select</option>
                         </select>
                      </div>
                      <br>
@@ -724,7 +708,7 @@
             <div class="container-fluid">
                <div class="row pb-3">
                   <div class="col-12" style="display: inherit;">
-                     <h4 style="display: inherit;">Other Products</h4>
+                     <h4 style="display: inherit;">Mixers, Aerators & Related Products</h4>
                      <!-- <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
                         <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter" onchange="showFilterField(this)">
                         <label class="custom-control-label" for="sparePartBodyFilter">Filter based on above pump</label>
