@@ -158,12 +158,24 @@ async function addRow(thisVal,tabBody){
 		}
 		else if(tabBody == "accessoryBody" || tabBody == "sparePartBody"){
 			if($("#"+tabBody+"Filter")[0].checked){
-			let productsBasedOnPump = [];
-			pumpLis.forEach(val => {
-				relatedRec = productsRelations[val.value] || {};
-					let productsData = relatedRec[tabBody] || [];
-					productsBasedOnPump = [...productsBasedOnPump,...productsData];
-			});
+			let relatedProducts = tabBody == "accessoryBody" ? 	accessoryDataLis : spareDataLis;
+			let productsBasedOnPump = relatedProducts.filter(product => {
+				if(product.Related_Pumps){
+					let relatedPumps = JSON.parse(product.Related_Pumps);
+					let rtnValue = false;
+					relatedPumps.forEach(pump => {
+					pumpLis.forEach(val => {
+						if(val.value == pump.id){
+							rtnValue = true;
+						}
+					});
+					});
+					return rtnValue;
+				}
+				else{
+					return false;
+				}
+			});	
 			if(productsBasedOnPump.length > 0){
 				appendTabRow(tabBody,rowVal);
 				require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
@@ -193,7 +205,21 @@ async function addRow(thisVal,tabBody){
 				}
 			}
 			else if(tabBody == "sparePartBody" && $("#sparePumpModel")[0].value != "-None-"){
-				let filterdSpare = spareDataLis.filter(data => data.Pump.id == $("#sparePumpModel")[0].value);
+				let filterdSpare = spareDataLis.filter(data => {
+					if(data.Related_Pumps){
+						let relatedPumps = JSON.parse(data.Related_Pumps);
+						let rtnValue = false;
+						relatedPumps.forEach(pump => {
+							if(pump.id == $("#sparePumpModel")[0].value){
+								rtnValue = true;
+							}
+						});
+						return rtnValue;
+					}
+					else{
+						return false;
+					}				
+				});
 				if(filterdSpare.length > 0){
 					appendTabRow(tabBody,rowVal);
 					require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
@@ -288,7 +314,7 @@ document.getElementById("searchBtn").onclick = event => {
 		console.log(fetchUrl);
 		fetch(fetchUrl)
 		.then(resp => resp.json(), err => {
-			swal("Unkown Error",err.toString(),"warning");
+			swal("Unknown Error",err.toString(),"warning");
 			console.log(err);
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
@@ -315,7 +341,7 @@ document.getElementById("searchBtn").onclick = event => {
 				document.getElementById("apiBody").innerHTML = rtn.join("");
 			}
 			else{
-				swal("Unkown Error",data.toString(),"warning");
+				swal("Unknown Error",data.toString(),"warning");
 			}
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
@@ -399,7 +425,7 @@ function submitFun(submitType){
 		});
 	});
 	if(subDataList.length == 0){
-		swal("No Products Available","Add any products to the quatation","error");
+		swal("No Products Available","Add any products to the quotation","error");
 		return false;
 	}
 	let quoteData = {
@@ -434,7 +460,7 @@ function submitFun(submitType){
 				location.reload();//
 			}
 			else{
-				swal("Failed","Unkown error","error");
+				swal("Failed","Unknown Error","error");
 			}
 			},function(err){
 				console.log(err);
@@ -456,7 +482,7 @@ function submitFun(submitType){
 				location.reload();
 			 }
 			 else{
-				 swal("Failed","Unkown error","error");
+				 swal("Failed","Unknown Error","error");
 			 }
 		  },function(err){
 			console.log(err);
@@ -593,12 +619,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	var crmDeals = await getRecords("Deals");
 	enquiryName.innerHTML =emptyOpt+crmDeals.map(data => '<option value="'+data.id+'">'+data.Deal_Name+'</option>').join("");
 	productsDataLis = await getRecords("Products");
-	for (product of productsDataLis){
-		let pumpId = (product.Pump || {}).id;
-		let pumpName = (product.Pump || {}).name;
-		let pumpKey = productsRelations[pumpId] || {};
-		let accLis = pumpKey.accessoryBody || [];
-		let spareLis = pumpKey.sparePartBody || [];
+	for (product of productsDataLis){	
 		if(product.Product_Category == "Pumps"){
 			for(let value of pumpLis){
 				let opt = document.createElement("option");
@@ -619,10 +640,6 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				opt.value = product.id;
 				value.add(opt);
 			}
-			if(pumpId){
-				accLis.push({Display_Name:product.Display_Name,id:product.id,Product_Code:product.Product_Code});
-				productsRelations[pumpId] ={...productsRelations[pumpId],...{Product_Name:pumpName,accessoryBody:accLis}};
-			}
 		}
 		else if(product.Product_Category == "Spare part of Pumps"){
 			spareDataLis.push(product);
@@ -631,10 +648,6 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 				opt.text = product.Display_Name +"-"+ product.Product_Code;
 				opt.value = product.id;
 				value.add(opt);
-			}
-			if(pumpId){
-				spareLis.push({Display_Name:product.Display_Name,id:product.id,Product_Code:product.Product_Code});
-				productsRelations[pumpId] ={...productsRelations[pumpId],...{Product_Name:pumpName,sparePartBody:spareLis}};
 			}
 		}
 		else if(product.Product_Category == "Mixers, Aerators & Related Products"){

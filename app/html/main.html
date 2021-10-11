@@ -117,7 +117,7 @@
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="custEquipmentNumber" class="mr-sm-2 justify-content-end">Cust. Equiment Number</label>
+               <label for="custEquipmentNumber" class="mr-sm-2 justify-content-end">Customer Equiment Number</label>
             </div>
             <div class="col-sm-8 col-12">
                <input type="text" class="form-control" id="custEquipmentNumber">
@@ -137,7 +137,7 @@
          </div>
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-4 col-12">
-               <label for="custEquipmentName" class="mr-sm-2 justify-content-end">Cust. Equiment Name</label>
+               <label for="custEquipmentName" class="mr-sm-2 justify-content-end">Customer Equiment Name</label>
             </div>
             <div class="col-sm-8 col-12">
                <input type="text" class="form-control" id="custEquipmentName">
@@ -197,7 +197,7 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-4 col-12">
-                     <label for="series" class="mr-sm-2 justify-content-end">Series</label>
+                     <label for="series" class="mr-sm-2 justify-content-end">Pump Series</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="series">
@@ -225,7 +225,7 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-4 col-12">
-                     <label for="size" class="mr-sm-2 justify-content-end">Size</label>
+                     <label for="size" class="mr-sm-2 justify-content-end">Pump Size</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="size">
@@ -416,7 +416,7 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="casingMoc" class="mr-sm-2 justify-content-end">Casing MoC</label>
+                     <label for="casingMoc" class="mr-sm-2 justify-content-end">Casing Material of Constr.</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="casingMoc">
@@ -438,7 +438,7 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="impellerMoc" class="mr-sm-2 justify-content-end">Impeller MoC</label>
+                     <label for="impellerMoc" class="mr-sm-2 justify-content-end">Impeller Material of Constr.</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="impellerMoc">
@@ -482,7 +482,7 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="shaftMoc" class="mr-sm-2 justify-content-end">Shaft MoC</label>
+                     <label for="shaftMoc" class="mr-sm-2 justify-content-end">Shaft Material of Constr.</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="shaftMoc">
@@ -492,7 +492,7 @@
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-4 col-12">
-                     <label for="flangeDrilling" class="mr-sm-2 justify-content-end">Flange Drilling</label>
+                     <label for="flangeDrilling" class="mr-sm-2 justify-content-end">Flange Drilling Std.</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="flangeDrilling">
@@ -504,7 +504,7 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="sleeveMoC" class="mr-sm-2 justify-content-end">Sleeve MoC</label>
+                     <label for="sleeveMoC" class="mr-sm-2 justify-content-end">Sleeve Material of Constr.</label>
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="sleeveMoC">
@@ -537,7 +537,7 @@
                            <tr style="display: none;">
                               <td>
                                  <select class="form-control w-100" name="pump" id="pump_###" index="###" onchange="fetchPrice(event,this)">
-                                    <option value="">-None-</option>
+                                    <option value="">Please Select</option>
                                  </select>
                                  <textarea class="form-control" rows="5" name="p_description" id="p_description_###" index="###" placeholder="Description" disabled></textarea>
                               </td>
@@ -586,7 +586,7 @@
                      </div>
                      <div class="col-sm-8 col-12">
                         <select class="form-control w-100" id="accessoryType">
-                           <option value="-None-">-None-</option>
+                           <option value="-None-">Please Select</option>
                         </select>
                      </div>
                      <br>
@@ -607,7 +607,7 @@
                               <tr style="display: none;">
                                  <td>
                                     <select class="form-control w-100" name="accessory" id="accessory_###" index="###" onchange="fetchPrice(event,this)">
-                                       <option value="">-None-</option>
+                                       <option value="">Please Select</option>
                                     </select>
                                     <textarea class='form-control' rows='5' name="a_description" id='a_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
@@ -641,7 +641,7 @@
             <div class="container-fluid">
                <div class="row pb-3">
                   <div class="col-12" style="display: inherit;">
-                     <h4 style="display: inherit;">Spare part of Pumps</h4>
+                     <h4 style="display: inherit;">Spare Part of Pumps</h4>
                      <div class="custom-control custom-switch" style="width: auto;margin: 0.5rem;">
                         <input type="checkbox" class="custom-control-input" id="sparePartBodyFilter" onchange="showFilterField(this)">
                         <label class="custom-control-label" for="sparePartBodyFilter">Filter based on above pump</label>
@@ -674,7 +674,7 @@
                               <tr style="display: none;">
                                  <td>
                                     <select class="form-control w-100" name="sparePart" id="sparePart_###" index="###" onchange="fetchPrice(event,this)">
-                                       <option value="">-None-</option>
+                                       <option value="">Please Select</option>
                                     </select>
                                     <textarea class='form-control' rows='5' name="s_description" id='s_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
@@ -730,7 +730,7 @@
                               <tr style="display: none;">
                                  <td>
                                     <select class="form-control w-100" name="otherProduct" id="otherProduct_###" index="###" onchange="fetchPrice(event,this)">
-                                       <option value="">-None-</option>
+                                       <option value="">Please Select</option>
                                     </select>
                                     <textarea class='form-control' rows='5' name="o_description" id='o_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
@@ -848,51 +848,51 @@
          </div>
       </div>
    </form>
-   </body>
    <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Select Any Quote</h4>
-          <button type="button" class="close" data-dismiss="modal">×</button>
-        </div>
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
         
-        <!-- Modal body -->
-        <div class="modal-body">
-           <div class="table-responsive">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Date</th>
-          <th>Subject</th>
-          <th>Quote Stage</th>
-          <th>Deal Name</th>
-          <th>Grand Total</th>
-        </tr>
-      </thead>
-      <tbody id="quoteBody">
-         <tr>
-            <td colspan="6">
-               <div id="loadingDiv" align="center";>
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">Loading...</span>
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Select Any Quote</h4>
+            <button type="button" class="close" data-dismiss="modal">×</button>
+          </div>
+          
+          <!-- Modal body -->
+          <div class="modal-body">
+             <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Subject</th>
+            <th>Quote Stage</th>
+            <th>Deal Name</th>
+            <th>Grand Total</th>
+          </tr>
+        </thead>
+        <tbody id="quoteBody">
+           <tr>
+              <td colspan="6">
+                 <div id="loadingDiv" align="center";>
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
                   </div>
-                </div>
-            </td>
-         </tr>
-      </tbody>
-    </table>
-  </div>
+              </td>
+           </tr>
+        </tbody>
+      </table>
+    </div>
+          </div>
+          
+         
+          
         </div>
-        
-       
-        
       </div>
     </div>
-  </div>
-   <script src="../js/functions.js"></script>
+    <script src="../js/functions.js"></script>
    <script src="../js/script.js"></script>
+   </body>
 </html>
