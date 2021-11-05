@@ -90,8 +90,8 @@
                <label for="customerName" class="mr-sm-2 justify-content-end">Customer Name</label>
             </div>
             <div class="col-sm-8 col-12">
-               <select class="form-control w-100" id="customerName" disabled>
-                  <option value="">-None-</option>
+               <select class="form-control w-100" id="customerName">
+                  <option value="">Please Select</option>
                </select>
             </div>
          </div>
@@ -125,7 +125,7 @@
          </div>
       </div>
       <div class="row pb-3">
-         <div class="col-sm-6 col-6 form-inline">
+         <div class="col-sm-6 col-6 form-inline" style="display: none;">
             <div class="col-sm-3 col-12">
                <label for="brand" class="mr-sm-2 justify-content-end">Brand</label>
             </div>
@@ -133,6 +133,14 @@
                <select class="form-control w-100" id="brand">
                   <option value="">-None-</option>
                </select>
+            </div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-3 col-12">
+               <label for="liquidName" class="mr-sm-2 justify-content-end">Liquid Name</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <input type="text" class="form-control" id="liquidName">
             </div>
          </div>
          <div class="col-sm-6 col-6 form-inline">
@@ -144,7 +152,7 @@
             </div>
          </div>
       </div>
-      <div class="row pb-3">
+      <!-- <div class="row pb-3">
          <div class="col-sm-6 col-6 form-inline">
             <div class="col-sm-3 col-12">
                <label for="customerNotes" class="mr-sm-2 justify-content-end">Customer Notes</label>
@@ -154,14 +162,14 @@
             </div>
          </div>
          <div class="col-sm-6 col-6 form-inline">
-            <div class="col-sm-4 col-12">
+             <div class="col-sm-4 col-12">
                <label for="liquidName" class="mr-sm-2 justify-content-end">Liquid Name</label>
             </div>
             <div class="col-sm-8 col-12">
                <input type="text" class="form-control" id="liquidName">
-            </div>
+            </div> 
          </div>
-      </div>
+      </div> -->
       <div class="first-session">
          <div class="col-12">
             <h4>Pumps</h4>
@@ -452,7 +460,7 @@
                   </div>
                   <div class="col-sm-8 col-12">
                      <select class="form-control w-100" id="sealingGlandFlushing">
-                        <option value="">-None-</option>
+                        <option value="">Please Select</option>
                      </select>
                   </div>
                </div>
@@ -480,7 +488,7 @@
                </div>
             </div>
             <div class="row pb-3">
-               <div class="col-sm-6 col-6 form-inline">
+               <div class="col-sm-6 col-6 form-inline" style="display: none;">
                   <div class="col-sm-3 col-12">
                      <label for="shaftMoc" class="mr-sm-2 justify-content-end">Shaft Material of Constr.</label>
                   </div>
@@ -489,6 +497,8 @@
                         <option value="">-None-</option>
                      </select>
                   </div>
+               </div>
+               <div class="col-sm-6 col-6 form-inline">
                </div>
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-4 col-12">
@@ -502,7 +512,7 @@
                </div>
             </div>
             <div class="row pb-3">
-               <div class="col-sm-6 col-6 form-inline">
+               <div class="col-sm-6 col-6 form-inline" style="display: none;">
                   <div class="col-sm-3 col-12">
                      <label for="sleeveMoC" class="mr-sm-2 justify-content-end">Sleeve Material of Constr.</label>
                   </div>
@@ -759,6 +769,14 @@
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
+         </div>
+         <div class="col-sm-6 col-6 form-inline">
+            <div class="col-sm-2 col-12">
+               <label for="customerNotes" class="mr-sm-2 justify-content-end">Notes</label>
+            </div>
+            <div class="col-sm-8 col-12">
+               <textarea class="form-control w-100" id="customerNotes"></textarea>
+            </div>
          </div>
          <div class="row pb-3 subTotal">
             <div class="col-sm-4 col-6 form-inline hide-mobile"></div>

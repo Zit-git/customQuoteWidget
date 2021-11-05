@@ -79,7 +79,7 @@ sleeveMoC.innerHTML = emptyOpt;
 impellerType.value = "-None-";
 lubrication.innerHTML = emptyOpt;
 shaftSealing.innerHTML = emptyOpt;
-sealingGlandFlushing.innerHTML = emptyOpt;
+sealingGlandFlushing.value = "";
 flangeDrilling.innerHTML = emptyOpt;
 }
 var initDetailSpecs = () => {
@@ -372,7 +372,7 @@ var seriesOnChange = async seriesVal => {
 		shaftMoc.innerHTML = emptyOpt;
 		sleeveMoC.innerHTML = emptyOpt;
 		impellerType.value = "-None-";
-		sealingGlandFlushing.innerHTML = emptyOpt;
+		sealingGlandFlushing.value = "";
 		size.innerHTML = emptyOpt;
 		var shaftSpeedLis = [];
 		crmSizes.forEach(val => shaftSpeedLis = shaftSpeedLis.concat(val.Shaft_Speed));
@@ -431,7 +431,7 @@ function submitFun(submitType){
 	let quoteData = {
 		id: selectedQuote,
 		Subject:subject.value,
-		Account_Name:customerName.value,
+		Customer_Name:customerName.value,	
 		Contact_ID:contactName.value,
 		Contact_Name:contactName.value,
 		Deal_Name:enquiryName.value,
@@ -597,10 +597,16 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	contactName.onchange = event => {
 		crmContacts.forEach(data => {
 			if(data.id == contactName.value){
-				let accountData = data.Account_Name || {};
-				let accId = accountData.id || "-None-";
-				let accName = accountData.name || "-None-";
-				customerName.innerHTML = '<option value="'+accId+'" selected>'+accName+'</option>';
+				console.log(data);
+				let relatedData = data.Related_Data || "{}";
+				relatedData = JSON.parse(relatedData);
+				if(!jQuery.isEmptyObject(relatedData)){
+					customerName.innerHTML = emptyOpt+relatedData.Customers.map(data => '<option value="'+data.id+'">'+data.name+'</option>').join("");
+				}
+				// let customerData = data.Customers || {};
+				// let CustomId = customerData.id || "-None-";
+				// let CustomName = customerData.name || "-None-";
+				// customerName.innerHTML = '<option value="'+CustomId+'" selected>'+CustomName+'</option>';
 				discountPercentage.value = data.Discount || 0;
 				if(discountPercentage.value > 0){
 					$('.discountPrct').show();
@@ -738,10 +744,13 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	shaftSealing.onchange = event => {
 		crmSeriesSingle.Series_Seal_Flushing.forEach(val => {
 			if(val.Shaft_Sealing == shaftSealing.value){
-				sealingGlandFlushing.innerHTML = emptyOpt+val.Mechanical_Seal_Flushing.map(sealFlushVal => '<option value="'+sealFlushVal+'">'+sealFlushVal+'</option>').join("");
-				if(val.Mechanical_Seal_Flushing.length == 1){
-					$("#sealingGlandFlushing").val(val.Mechanical_Seal_Flushing[0]).change();
+				if(pumpSearchMethod.value == "Route2"){
+					sealingGlandFlushing.innerHTML = emptyOpt+val.Mechanical_Seal_Flushing.map(sealFlushVal => '<option value="'+sealFlushVal+'">'+sealFlushVal+'</option>').join("");
+					if(val.Mechanical_Seal_Flushing.length == 1){
+						$("#sealingGlandFlushing").val(val.Mechanical_Seal_Flushing[0]).change();
+					}
 				}
+				
 			}
 		});
 	}
