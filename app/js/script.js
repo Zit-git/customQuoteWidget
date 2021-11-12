@@ -246,7 +246,7 @@ async function addRow(thisVal,tabBody){
 		}
 		if(mandatoryCheck && routeMethod){
 			let searchMap = {Pump_Type:pumpType.value,Series:serSeries,Shaft_Speed:serSpeed,Size:serSize};
-			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Shaft_MoC:shaftMoc.value,Sleeve_MoC:sleeveMoC.value,Impeller_Type:impellerType.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
+			let filterMap = {Casing_MoC:casingMoc.value,Impeller_MoC:impellerMoc.value,Shaft_MoC:shaftMoc.value,Sleeve_MoC:sleeveMoC.value,Lubrication:lubrication.value,Shaft_Sealing:shaftSealing.value,Mechanical_Seal_Flushing:sealingGlandFlushing.value,Flange_Drilling:flangeDrilling.value};
 			selectData = {...selectData, ...searchMap, ...filterMap};
 			console.log(selectData);
 			let searchQuery = "(";

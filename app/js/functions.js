@@ -80,10 +80,12 @@ var calcTotal = () =>{
 		subTotalVal += Number(currTotalVal);
 	}
 	subTotal.value = roundToTwo(subTotalVal);
+	subTotal.value =  addCommas(subTotal.value);
 	let discountPercntVal = discountPercentage.value ? discountPercentage.value / 100 : 0;
 	let discountVal = subTotalVal * discountPercntVal;
 	discount.value = roundToTwo(discountVal);
 	totalAmount.value = roundToTwo(subTotalVal - discountVal);
+	totalAmount.value =  addCommas(totalAmount.value);
 }
 async function fetchPrice(event,thisVal) {
 	let productId = thisVal.value;
@@ -101,13 +103,17 @@ async function fetchPrice(event,thisVal) {
     let rowIndex = thisVal.getAttribute("index");
 	let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
 	let unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
+	let unitPriceshow = document.getElementById(firstLtr+"_unitPrice_"+rowIndex + "_show");
 	let description = document.getElementById(firstLtr+"_description_"+rowIndex);
 	let amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
+	let amountshow = document.getElementById(firstLtr+"_amount_"+rowIndex + "_show");
 	let quantityVal = quantity.value || 0;
 	let unitPriceVal = crmProductSingle.Unit_Price;
 	
 	description.value = descriptionVal;
 	unitPrice.value = unitPriceVal;
+	unitPriceshow.value = addCommas(unitPriceVal);
+	amountshow.value = addCommas(quantityVal * unitPriceVal);
 	amount.value = quantityVal * unitPriceVal;
 	let tabTotalVal = 0;
 	tabTotal = conMap[firstLtr];
@@ -122,18 +128,37 @@ function calcAmount(event,thisVal){
 	var firstLtr = thisVal.name.substring(0,1); // p or a or s or o
 	var rowIndex = thisVal.getAttribute("index");
 	let quantityField = $("#"+firstLtr+"_quantity_"+rowIndex)[0];
+	var accessoryTotal = document.getElementById("accessoryTotal_show");
+	var otherProductTotal = document.getElementById("otherProductsTotal_show"); 
+	var spareTotal = document.getElementById("sparePartTotal_show");
+	var pumpTotal = document.getElementById("pumpTotal_show"); 
 	let quantityVal = quantityField.value || 0;
 	if(quantityVal > 0){
 		var unitPrice = document.getElementById(firstLtr+"_unitPrice_"+rowIndex);
 	var amount = document.getElementById(firstLtr+"_amount_"+rowIndex);
+	var amountshow = document.getElementById(firstLtr+"_amount_"+rowIndex + "_show");
 	var unitPriceVal = unitPrice.value || 0;
 	amount.value = quantityVal * unitPriceVal;
+	amountshow.value = addCommas(quantityVal * unitPriceVal);
 	var tabTotalVal = 0;
 	tabTotal = conMap[firstLtr];
 	for(let amount of tabTotal){
 		tabTotalVal += Number(amount.value);
 	}
 	totalMap[firstLtr].value = roundToTwo(tabTotalVal);
+	if(firstLtr == "a"){
+		accessoryTotal.value = addCommas(totalMap[firstLtr].value);
+	}
+	if(firstLtr == "s"){
+		spareTotal.value = addCommas(totalMap[firstLtr].value);
+	}
+	if(firstLtr == "o"){
+		otherProductTotal.value = addCommas(totalMap[firstLtr].value);
+	}
+	if(firstLtr == "p"){
+		pumpTotal.value = addCommas(totalMap[firstLtr].value);
+	}
+
 	calcTotal();
 	}
 	else{
@@ -387,6 +412,11 @@ function showDetail(thisVal){
 		}
 	}
 }
+
+function addCommas(x) {
+    return x.toString().split('.')[0].length > 3 ? x.toString().substring(0,x.toString().split('.')[0].length-3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length-3): x.toString();
+}
+
 var showFilterField = thisVal =>{
 	if(thisVal.id == "accessoryBodyFilter" && thisVal.checked){
 		$("#accessoryType")[0].value = "-None-";

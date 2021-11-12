@@ -468,16 +468,6 @@
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline">
                   <div class="col-sm-3 col-12">
-                     <label for="impellerType" class="mr-sm-2 justify-content-end">Impeller Type</label>
-                  </div>
-                  <div class="col-sm-8 col-12">
-                     <select class="form-control w-100" id="impellerType">
-                        <option value="">-None-</option>
-                     </select>
-                  </div>
-               </div>
-               <div class="col-sm-6 col-6 form-inline">
-                  <div class="col-sm-4 col-12">
                      <label for="lubrication" class="mr-sm-2 justify-content-end">Bearing Lubrication</label>
                   </div>
                   <div class="col-sm-8 col-12">
@@ -486,6 +476,16 @@
                      </select>
                   </div>
                </div>
+               <div class="col-sm-6 col-6 form-inline">
+                  <div class="col-sm-4 col-12">
+                     <label for="flangeDrilling" class="mr-sm-2 justify-content-end">Flange Drilling Std.</label>
+                  </div>
+                  <div class="col-sm-8 col-12">
+                     <select class="form-control w-100" id="flangeDrilling">
+                        <option value="">-None-</option>
+                     </select>
+                  </div>
+               </div>    
             </div>
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline" style="display: none;">
@@ -498,19 +498,17 @@
                      </select>
                   </div>
                </div>
-               <div class="col-sm-6 col-6 form-inline">
-               </div>
-               <div class="col-sm-6 col-6 form-inline">
-                  <div class="col-sm-4 col-12">
-                     <label for="flangeDrilling" class="mr-sm-2 justify-content-end">Flange Drilling Std.</label>
+               <div class="col-sm-6 col-6 form-inline" style="display: none;">
+                  <div class="col-sm-3 col-12">
+                     <label for="impellerType" class="mr-sm-2 justify-content-end">Impeller Type</label>
                   </div>
                   <div class="col-sm-8 col-12">
-                     <select class="form-control w-100" id="flangeDrilling">
+                     <select class="form-control w-100" id="impellerType">
                         <option value="">-None-</option>
                      </select>
                   </div>
-               </div>
-            </div>
+              </div>            
+           </div>
             <div class="row pb-3">
                <div class="col-sm-6 col-6 form-inline" style="display: none;">
                   <div class="col-sm-3 col-12">
@@ -552,8 +550,14 @@
                                  <textarea class="form-control" rows="5" name="p_description" id="p_description_###" index="###" placeholder="Description" disabled></textarea>
                               </td>
                               <td><input type="number" class="form-control" name="p_quantity" id="p_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
-                              <td><input type="text" class="form-control symbol-unit" name="p_unitPrice" id="p_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
-                              <td><input type="text" class="form-control symbol-unit" name="p_amount" id="p_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                              <td>
+                                 <input type="text" class="form-control symbol-unit hiddenctrl" name="p_unitPrice" id="p_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                 <input type="text" class="form-control symbol-unit" name="p_unitPriceshow" id="p_unitPrice_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                 <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                              <td>
+                                 <input type="text" class="form-control symbol-unit hiddenctrl" name="p_amount" id="p_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                 <input type="text" class="form-control symbol-unit" name="p_amountshow" id="p_amount_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                 <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
                               <td class="red-color" style="border: none;">
                                  <i class="fas fa-times-circle" id="p_delete_###" index="###" onclick="delRow(this)"></i>
                                  <!-- <textarea class="form-control" rows="5" name="p_specs" id="p_specs_###" index="###"></textarea>
@@ -575,7 +579,9 @@
                   <label for="pumpTotal" class="mr-sm-2 justify-content-end">Pump Total</label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="pumpTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit hiddenctrl" id="pumpTotal" data-type="currency" disabled>
+                  <input type="text" class="form-control symbol-unit" id="pumpTotal_show" data-type="currency" disabled>
+                  <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
@@ -622,8 +628,14 @@
                                     <textarea class='form-control' rows='5' name="a_description" id='a_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
                                  <td><input type="number" class="form-control" name="a_quantity" id="a_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
-                                 <td><input type="text" class="form-control symbol-unit" name="a_unitPrice" id="a_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
-                                 <td><input type="text" class="form-control symbol-unit" name="a_amount" id="a_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td>
+                                    <input type="text" class="form-control symbol-unit hiddenctrl" name="a_unitPrice" id="a_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <input type="text" class="form-control symbol-unit" name="a_unitPriceshow" id="a_unitPrice_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td>
+                                    <input type="text" class="form-control symbol-unit hiddenctrl" name="a_amount" id="a_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency"  disabled>
+                                    <input type="text" class="form-control symbol-unit" name="a_amountshow" id="a_amount_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
                                  <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="a_delete_###" index="###" onclick="delRow(this)"></i></td>
                               </tr>
                            </tbody>
@@ -642,7 +654,8 @@
                   <label for="accessoryTotal" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Accessory Total</label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="accessoryTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit hiddenctrl" id="accessoryTotal" data-type="currency" disabled>
+                  <input type="text" class="form-control symbol-unit" id="accessoryTotal_show" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
@@ -689,8 +702,14 @@
                                     <textarea class='form-control' rows='5' name="s_description" id='s_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
                                  <td><input type="number" class="form-control" name="s_quantity" id="s_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
-                                 <td><input type="text" class="form-control symbol-unit" name="s_unitPrice" id="s_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
-                                 <td><input type="text" class="form-control symbol-unit" name="s_amount" id="s_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td>
+                                    <input type="text" class="form-control symbol-unit hiddenctrl" name="s_unitPrice" id="s_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <input type="text" class="form-control symbol-unit" name="s_unitPriceshow" id="s_unitPrice_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td>
+                                    <input type="text" class="form-control symbol-unit hiddenctrl" name="s_amount" id="s_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <input type="text" class="form-control symbol-unit" name="s_amountshow" id="s_amount_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
                                  <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="s_delete_###" index="###" onclick="delRow(this)"></i></td>
                               </tr>
                            </tbody>
@@ -709,7 +728,9 @@
                   <label for="sparePartTotal" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Spare Parts Total</label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="sparePartTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit hiddenctrl" id="sparePartTotal" data-type="currency" disabled>
+                  <input type="text" class="form-control symbol-unit" id="sparePartTotal_show" data-type="currency" disabled>
+                  <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
@@ -745,8 +766,15 @@
                                     <textarea class='form-control' rows='5' name="o_description" id='o_description_###' index="###" placeholder="Description" disabled></textarea>
                                  </td>
                                  <td><input type="number" class="form-control" name="o_quantity" id="o_quantity_###" index="###" onchange="calcAmount(event,this)"></td>
-                                 <td><input type="text" class="form-control symbol-unit" name="o_unitPrice" id="o_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
-                                 <td><input type="text" class="form-control symbol-unit" name="o_amount" id="o_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td>
+                                    <input type="text" class="form-control symbol-unit hiddenctrl" name="o_unitPrice" id="o_unitPrice_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <input type="text" class="form-control symbol-unit" name="o_unitPriceshow" id="o_unitPrice_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+
+                                    <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
+                                 <td>
+                                    <input type="text" class="form-control symbol-unit hiddenctrl" name="o_amount" id="o_amount_###" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <input type="text" class="form-control symbol-unit" name="o_amountshow" id="o_amount_###_show" index="###" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" disabled>
+                                    <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span></td>
                                  <td class="red-color" style="border: none;"><i class="fas fa-times-circle" id="o_delete_###" index="###" onclick="delRow(this)"></i></td>
                               </tr>
                            </tbody>
@@ -765,7 +793,9 @@
                   <label for="otherProductsTotal" class="mr-sm-2 justify-content-end" style="white-space:nowrap">Other Products Total</label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="otherProductsTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit hiddenctrl" id="otherProductsTotal" data-type="currency" disabled>
+                  <input type="text" class="form-control symbol-unit" id="otherProductsTotal_show" data-type="currency" disabled>
+                  <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
