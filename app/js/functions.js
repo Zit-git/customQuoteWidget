@@ -61,6 +61,7 @@ function delRow(thisValue){
 	var rowIndex = thisValue.getAttribute("index");
 	var amountVal = document.getElementById(firstLtr+"_amount_"+rowIndex).value || 0;
 	totalMap[firstLtr].value = totalMap[firstLtr].value - amountVal;
+	totaMapShow[firstLtr].value = addCommas(totalMap[firstLtr].value);
 	calcTotal();
 	parNode.remove();
 }
@@ -71,21 +72,25 @@ function roundToTwo(num) {
 }
 var calcTotal = () =>{
 	let subTotal = document.getElementById("subTotal");
+	let subTotalShow = document.getElementById("subTotal_show"); 
 	let discountPercentage = document.getElementById("discountPercentage");
 	let discount = document.getElementById("discount");
+	let discountShow = document.getElementById("discount_show");
 	let totalAmount = document.getElementById("totalAmount");
+	let totalAmountShow = document.getElementById("totalAmount_show"); 
 	subTotalVal = 0;
 	for (let i in totalMap){
 		currTotalVal = totalMap[i].value || 0;
 		subTotalVal += Number(currTotalVal);
 	}
 	subTotal.value = roundToTwo(subTotalVal);
-	subTotal.value =  addCommas(subTotal.value);
+	subTotalShow.value =  addCommas(roundToTwo(subTotalVal));
 	let discountPercntVal = discountPercentage.value ? discountPercentage.value / 100 : 0;
 	let discountVal = subTotalVal * discountPercntVal;
 	discount.value = roundToTwo(discountVal);
+	discountShow.value = addCommas(roundToTwo(discountVal));
 	totalAmount.value = roundToTwo(subTotalVal - discountVal);
-	totalAmount.value =  addCommas(totalAmount.value);
+	totalAmountShow.value =  addCommas(roundToTwo(subTotalVal - discountVal));
 }
 async function fetchPrice(event,thisVal) {
 	let productId = thisVal.value;
@@ -121,6 +126,7 @@ async function fetchPrice(event,thisVal) {
 		tabTotalVal += Number(amount.value);
 	}
 	totalMap[firstLtr].value = roundToTwo(tabTotalVal);
+	totaMapShow[firstLtr].value = addCommas(roundToTwo(tabTotalVal));
 	calcTotal();
 }
 }
@@ -146,19 +152,7 @@ function calcAmount(event,thisVal){
 		tabTotalVal += Number(amount.value);
 	}
 	totalMap[firstLtr].value = roundToTwo(tabTotalVal);
-	if(firstLtr == "a"){
-		accessoryTotal.value = addCommas(totalMap[firstLtr].value);
-	}
-	if(firstLtr == "s"){
-		spareTotal.value = addCommas(totalMap[firstLtr].value);
-	}
-	if(firstLtr == "o"){
-		otherProductTotal.value = addCommas(totalMap[firstLtr].value);
-	}
-	if(firstLtr == "p"){
-		pumpTotal.value = addCommas(totalMap[firstLtr].value);
-	}
-
+	totaMapShow[firstLtr].value = addCommas(roundToTwo(tabTotalVal));
 	calcTotal();
 	}
 	else{

@@ -816,7 +816,9 @@
                   <label for="subTotal" class="mr-sm-2 justify-content-end">Sub Total</label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="subTotal" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                <input type="text" class="form-control symbol-unit hiddenctrl" id="subTotal" data-type="currency" disabled>
+                <input type="text" class="form-control symbol-unit " id="subTotal_show" data-type="currency" disabled>
+                <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
@@ -844,7 +846,9 @@
                   <label for="discount" class="mr-sm-2 justify-content-end">Discount(-)</label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="discount" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit hiddenctrl" id="discount" data-type="currency" disabled>
+                  <input type="text" class="form-control symbol-unit" id="discount_show" data-type="currency" disabled>
+                  <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
@@ -881,7 +885,9 @@
                   <label for="totalAmount" class="mr-sm-2 justify-content-end"><b>Total Amount</b></label>
                </div>
                <div class="col-sm-7 col-12">
-                  <input type="text" class="form-control symbol-unit" id="totalAmount" data-type="currency" disabled><span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
+                  <input type="text" class="form-control symbol-unit hiddenctrl" id="totalAmount" data-type="currency" disabled>
+                  <input type="text" class="form-control symbol-unit" id="totalAmount_show" data-type="currency" disabled>
+                  <span class="unitSymbol"><i class="fas fa-rupee-sign"></i></span>
                </div>
             </div>
             <div class="col-sm-1 col-6 form-inline hide-mobile"></div>
