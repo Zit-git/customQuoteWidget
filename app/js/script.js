@@ -138,7 +138,7 @@ async function addRow(thisVal,tabBody){
 					let effVal = (apiSelectedData.EFFICIENCY || "NA")+"%";
 					let motorRatVal = apiSelectedData.MOTOR_RATING_KW || "NA";
 					let shaftPwr = apiSelectedData.SHAFT_POWER || "NA";
-					apiSpecs = "\nFlow rate: "+flowRate.value+" "+flowRateUnit.value+",  Head: "+head.value+" "+headUnit.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+",  Reco. Motor: "+motorRatVal+",  Pump bkW / bhp: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+($("#liquidName")[0].value || "NA")+",  ";
+					apiSpecs = "\nFlow rate: "+flowRate.value+" "+flowRateUnit.value+",  Head: "+head.value+" "+headUnit.value+",  Efficiency: "+effVal+",  Sp. Gr: "+specificGravity.value+", Pump bkW / bhp: "+shaftPwr+",  Casing MoC: "+casingMoc.value+",   Liquid Name: "+($("#liquidName")[0].value || "NA")+",  ";
 					selectData.apiTableData = apiSelectedData;
 				}
 			});

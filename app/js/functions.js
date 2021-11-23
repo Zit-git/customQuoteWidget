@@ -100,7 +100,7 @@ async function fetchPrice(event,thisVal) {
 	let firstLtr = thisVal.name.substring(0,1); // p or a or s or o
 	let descriptionVal = crmProductSingle.Description || "";
 	if(firstLtr == "p"){ //pump
-		let finalTxt = "\nDatasheet ref nr: "+ (crmProductSingle.TDS_Ref || "NA") + " (For operating limits and warranty conditions check the datasheet)";
+		let finalTxt = "\nDatasheet ref nr: "+ (crmProductSingle.TDS_Ref || "NA") + " (For operating limits, Recommended motor margins and warranty conditions check the datasheet)";
 		descriptionVal+= apiSpecs+finalTxt;
 		let cusTempMap = {Product_Id:crmProductSingle.id,Specification:apiSpecs +finalTxt,Select_Data:selectData};
 		subCustomData.push(cusTempMap);
