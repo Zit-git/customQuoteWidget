@@ -284,7 +284,7 @@ async function addRow(thisVal,tabBody){
 					}
 				}
 				else{
-					swal("Invalid Selection","No products available with given values","info");
+					swal("Invalid Selection","No pump found for the given duty conditions. Please change the duty conditions and try again","info");
 				}
 		}
 		else if(routeMethod){
@@ -501,7 +501,7 @@ document.getElementById("quoteForm").onsubmit = function(thisVal){
 	if(thisVal.submitter.id == "submitBtn"){
 		swal({
 			title: "Disclaimer",
-			text: "I / we hereby confirm that the data entered and the product(s) selected are as per the application / customer requirements after reviewing the performance parameters and the operational limits as per the literature provided by Flowmart India Pvt. Ltd..FlowMart India Pvt. Ltd. bears no responsibility regarding the suitability of the selected product(s) for the desired application as long as the operational limits are adhered to.",
+			text: "I / we hereby confirm that the data entered by me / us and the product(s) selected are as per the application / customer requirements as per site and operating parameters. I / we have selected the product(s) based on the desired operational limits of the products(s) as per the literature provided by Flowmart India Pvt. Ltd. FlowMart India Pvt. Ltd. bears no responsibility regarding the suitability of the selected product(s) for the desired application if the actual operating parameters do not fall within the operational limits of the product(s).",
 			icon: "info",
 			buttons: ["Cancel","I Agree"]
 		  }).then((agreed) => {
