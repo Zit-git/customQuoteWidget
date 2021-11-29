@@ -74,7 +74,7 @@ var totaMapShow = {p:pumpTotalShow,a:accessoryTotalShow,s:sparePartTotalShow,o:o
 pumpSearchMethod.onchange = showDetail;
 quoteDate.valueAsDate  = currDate;
 //console.log(quoteDate.value); //quoteDate.valueAsDate.toISOString();
-require([subject.id,contactName.id],"id");
+require([subject.id,contactName.id,customerName.id],"id");
 // require(["optradio1"],"name");
 var initPumpInformation = () => {
 casingMoc.innerHTML = emptyOpt;
@@ -284,7 +284,7 @@ async function addRow(thisVal,tabBody){
 					}
 				}
 				else{
-					swal("Invalid Selection","No pump found for the given duty conditions. Please change the duty conditions and try again","info");
+					swal("Invalid Selection","No products available with given values","info");
 				}
 		}
 		else if(routeMethod){
@@ -319,7 +319,7 @@ document.getElementById("searchBtn").onclick = event => {
 		console.log(fetchUrl);
 		fetch(fetchUrl)
 		.then(resp => resp.json(), err => {
-			swal("Unknown Error",err.toString(),"warning");
+			swal("API Error","No pump found for the given duty conditions. Please change the duty conditions and try again." - err.toString(),"warning");
 			console.log(err);
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
@@ -346,7 +346,7 @@ document.getElementById("searchBtn").onclick = event => {
 				document.getElementById("apiBody").innerHTML = rtn.join("");
 			}
 			else{
-				swal("Unknown Error",data.toString(),"warning");
+				swal("API Error","No pump found for the given duty conditions. Please change the duty conditions and try again." - data.toString(),"warning");
 			}
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
