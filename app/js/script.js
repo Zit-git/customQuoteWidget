@@ -122,7 +122,7 @@ async function addRow(thisVal,tabBody){
 			serSeries = series.value;//series.options[series.selectedIndex].text;
 			serSize = size.value;
 			serSpeed = shaftSpeed.value;
-		}
+		}		
 		else if(pumpSearchMethod.value == "Route1" && tabBody == "pumpBody"){
 			// Route 1 API
 			mandatoryCheck = true;
@@ -160,7 +160,7 @@ async function addRow(thisVal,tabBody){
 				mandatoryCheck = false;
 				swal("Invalid Selection","Select any one of the result in the pump specification list or Click the SEARCH Button","info");
 			}
-		}
+		}		
 		else if(tabBody == "accessoryBody" || tabBody == "sparePartBody"){
 			if($("#"+tabBody+"Filter")[0].checked){
 			let relatedProducts = tabBody == "accessoryBody" ? 	accessoryDataLis : spareDataLis;
@@ -238,13 +238,14 @@ async function addRow(thisVal,tabBody){
 					swal("Invalid Selection","No products available with given values","info");
 				}
 			}
-			else{
+			else{				
 				appendTabRow(tabBody,rowVal);
 				require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
 				rowCount[tabBody]++;
 			}
 		}
 		else{
+			apiSpecs = "";
 			appendTabRow(tabBody,rowVal);
 			require([conMap[tabBody]+rowVal,firstLtr+"_quantity_"+rowVal],"id");
 			rowCount[tabBody]++;
