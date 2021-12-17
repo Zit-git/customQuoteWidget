@@ -349,6 +349,9 @@ $('.apiTable').hide();
 // }
 function showDetail(thisVal){
 	console.log(this.value);
+	initPumpInformation();
+	initDetailSpecs();
+	$('.apiTable').hide();
 	if (this.value == 'Route1') {
 		// Route 1 API
 		$('.basic-session').show();
@@ -405,7 +408,7 @@ function showDetail(thisVal){
 		for(let i of $("#detailSession :input")){
 			notRequire([i.id],"id");
 		}
-	}
+	}	
 }
 
 function addCommas(x) {
