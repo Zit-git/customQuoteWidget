@@ -70,6 +70,7 @@ var discount = document.getElementById("discount");
 var conMap = {p:pumpAmtLis,a:accessoryAmtLis,s:sparePartAmtLis,o:otherProductsAmtLis};
 var totalMap = {p:pumpTotal,a:accessoryTotal,s:sparePartTotal,o:otherProductsTotal};
 var totaMapShow = {p:pumpTotalShow,a:accessoryTotalShow,s:sparePartTotalShow,o:otherProductsTotalShow};
+var tempMechSeal;
 // Expressions
 pumpSearchMethod.onchange = showDetail;
 quoteDate.valueAsDate  = currDate;
@@ -750,11 +751,15 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 	shaftSealing.onchange = event => {
 		crmSeriesSingle.Series_Seal_Flushing.forEach(val => {
 			if(val.Shaft_Sealing == shaftSealing.value){
-				if(pumpSearchMethod.value == "Route2"){
+				if(pumpSearchMethod.value == "Route2" || shaftSealing.value == "Gland Packing"){
 					sealingGlandFlushing.innerHTML = emptyOpt+val.Mechanical_Seal_Flushing.map(sealFlushVal => '<option value="'+sealFlushVal+'">'+sealFlushVal+'</option>').join("");
 					if(val.Mechanical_Seal_Flushing.length == 1){
 						$("#sealingGlandFlushing").val(val.Mechanical_Seal_Flushing[0]).change();
 					}
+				}
+				else{
+					sealingGlandFlushing.innerHTML = emptyOpt+'<option value="'+tempMechSeal+'">'+tempMechSeal+'</option>';
+					$("#sealingGlandFlushing").val(tempMechSeal).change();
 				}
 				
 			}
@@ -807,7 +812,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 					let tempMin = val.Temperature_Min;
 					let tempMax = val.Temperature_Max;
 					if(tempVal >= tempMin && tempVal <= tempMax){
-						sealingGlandFlushing.innerHTML =emptyOpt+'<option value="'+val.Mechanical_Seal_Flushing+'">'+val.Mechanical_Seal_Flushing+'</option>';
+						tempMechSeal = val.Mechanical_Seal_Flushing;
 					}
 				});
 			}
