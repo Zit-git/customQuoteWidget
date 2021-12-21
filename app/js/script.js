@@ -426,7 +426,7 @@ function submitFun(submitType){
 				let rowIndex = data.getAttribute("index");
 				let quantity = document.getElementById(firstLtr+"_quantity_"+rowIndex);
 				let description = document.getElementById(firstLtr+"_description_"+rowIndex);
-				let dataMap = {product:data.value,quantity:Number(quantity.value),product_description:description.value};
+				let dataMap = {product:data.value,quantity:Number(quantity.value),product_description:description.value,line_tax:[]};
 				subDataList.push(dataMap);
 			}
 		});
