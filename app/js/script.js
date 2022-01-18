@@ -1,6 +1,7 @@
 //Fields and Global Varibales
 var currDate = new Date();
 var currentUser;
+var ownerID;
 var selectedQuote;
 var productsDataLis = [];
 var accessoryDataLis = [];
@@ -434,7 +435,15 @@ function submitFun(submitType){
 		swal("No Products Available","Add any products to the quotation","error");
 		return false;
 	}
-	let quoteData = {
+	
+	currentUser = currentUser || [];
+	if(currentUser.length > 0){
+		OwnerIDValue = currentUser[0].id; 
+	}
+	else{
+		OwnerIDValue = ownerID;
+	} 	
+	 let quoteData = {
 		id: selectedQuote,
 		Subject:subject.value,
 		Customer_Name:customerName.value,	
@@ -451,8 +460,11 @@ function submitFun(submitType){
 		Brand:brand.value,
 		Accessory_Type: accessoryType.value,
 		Discount:discountPercentage.value+"%",
-		Product_Details:subDataList
+		Product_Details:subDataList,
+		Revision_Reference: "R01",
+		Owner:{"id":OwnerIDValue}
 	};
+
 	quoteData = mapFilter(quoteData);
 	console.log(quoteData);
 	currentUser = currentUser || [];
@@ -604,6 +616,7 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		crmContacts.forEach(data => {
 			if(data.id == contactName.value){
 				console.log(data);
+				ownerID = data.Owner.id;			
 				let relatedData = data.Related_Data || "{}";
 				relatedData = JSON.parse(relatedData);
 				if(!jQuery.isEmptyObject(relatedData)){
