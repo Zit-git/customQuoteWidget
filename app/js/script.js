@@ -463,7 +463,6 @@ function submitFun(submitType){
 		Accessory_Type: accessoryType.value,
 		Discount:discountPercentage.value+"%",
 		Product_Details:subDataList,
-		Revision_Reference: "R01",
 		Owner:{"id":OwnerIDValue}
 	};
 
