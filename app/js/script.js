@@ -322,13 +322,13 @@ document.getElementById("searchBtn").onclick = event => {
 		Object.keys(params).forEach(key => fetchUrl.searchParams.append(key, params[key]));
 		console.log(fetchUrl);
 		fetch(fetchUrl)
-		.then(resp => resp.json(), err => {
+		.then(resp => resp.json(), err => {			
 			swal("API Error","No pump found for the given duty conditions. Please change the duty conditions and try again." - err.toString(),"warning");
 			console.log(err);
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
 		})
-		.then(data => {
+		.then(data => {			
 			if(data.Table1){
 				apiTableData = data.Table1;
 				$('.apiTable').show();
@@ -349,8 +349,8 @@ document.getElementById("searchBtn").onclick = event => {
 				});
 				document.getElementById("apiBody").innerHTML = rtn.join("");
 			}
-			else{
-				swal("API Error","No pump found for the given duty conditions. Please change the duty conditions and try again." - data.toString(),"warning");
+			else if(data == "No data found!"){
+				swal(data,"The required Flow Rate and Head combination is not available in the current product range. Kindly try again with different inputs","warning");
 			}
 			$('#loadingDiv').hide();
 			$('#searchBtn').show();
@@ -473,7 +473,7 @@ function submitFun(submitType){
 	if(!quoteData.id){
 		ZOHO.CRM.API.insertRecord({Entity:"Quotes",APIData:quoteData}).then(function(data){
 			let respData = data.data;
-			if(respData){
+			if(respData){				
 				swal(respData[0].code,respData[0].message,"success");
 				window.parent.parent.window.location = redirectUrl+respData[0].details.id;
 				location.reload();//
@@ -785,8 +785,16 @@ ZOHO.embeddedApp.on("PageLoad",function(etData){
 		initPumpInformation();
 		if(applicationType.value){
 		crmAppTypeSingle = await getSingleRecord("Application_Types",applicationType.value);
+		$("#temperature").attr("placeholder", "Enter Flow Rate Value " + crmAppTypeSingle.Temperature_Min + " - " + crmAppTypeSingle.Temperature_Max,"");
+		$("#specificGravity").attr("placeholder", "Enter Flow Rate Value " + crmAppTypeSingle.Specific_Gravity_Min + " - " + crmAppTypeSingle.Specific_Gravity_Max,"");
+
 		}
 	}
+
+	$("#flowRate").attr("placeholder", "Enter Flow Rate Value " + crmPumpTypes[0].Flow_Rate_Min + " - " + crmPumpTypes[0].Flow_Rate_Max,"");
+	$("#head").attr("placeholder", "Enter Flow Rate Value " + crmPumpTypes[0].Head_Min + " - " + crmPumpTypes[0].Head_Max,"");
+	
+	
 	flowRate.onchange = event => {
 		$('.apiTable').hide();
 		initPumpInformation();
